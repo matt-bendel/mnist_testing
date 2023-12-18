@@ -8,7 +8,7 @@ class MNISTDataModule(pl.LightningDataModule):
         super().__init__()
         self.batch_size = 128
         self.num_workers = 4
-        self.data_dir = "/Users/mattbendel/mnist"
+        self.data_dir = "/storage/matt_models/mnist"
 
         self.transform = transforms.Compose(
             [
