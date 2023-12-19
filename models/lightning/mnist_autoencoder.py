@@ -35,7 +35,7 @@ class MNISTAutoencoder(pl.LightningModule):
 
         opt1 = self.optimizers()
 
-        x_hat = self.mean_net(x)
+        x_hat = self.autoencoder(x)
         # x_hat = self.readd_measures(x_hat, y)
         mu_loss = F.mse_loss(x_hat, x)
 
