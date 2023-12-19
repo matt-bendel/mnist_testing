@@ -30,6 +30,7 @@ if __name__ == '__main__':
     model = rcGAN(cfg, args.exp_name)
 
     dm = MNISTDataModule()
+    dm.setup()
 
     best_epoch = 0
     best_cfid = 100000000
