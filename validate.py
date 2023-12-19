@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
         model.eval()
 
-        cfid_val = cfid.get_cfid_torch_pinv()
+        cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv()
         print(cfid_val)
 
         if cfid_val < best_cfid:
