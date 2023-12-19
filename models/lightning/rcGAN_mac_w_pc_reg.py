@@ -162,6 +162,7 @@ class rcGANWReg(pl.LightningModule):
             gens_zm = gens_zm.view(gens.shape[0], self.args.num_z_pca, -1)
 
             x_zm = x - torch.mean(gens, dim=1).clone().detach()
+            x_zm = x_zm.view(gens.shape[0], -1)
 
             w_loss = 0
             sig_loss = 0
@@ -171,7 +172,7 @@ class rcGANWReg(pl.LightningModule):
             for n in range(gens_zm.shape[0]):
                 _, S, Vh = torch.linalg.svd(gens_zm[n], full_matrices=False)
 
-                current_x_xm = x_zm[n, 0, :]
+                current_x_xm = x_zm[n, :]
                 inner_product = torch.sum(Vh * current_x_xm[None, :], dim=1)
 
                 w_obj = inner_product ** 2
