@@ -180,10 +180,9 @@ class CFIDMetric:
     def get_cfid_torch_pinv(self):
         y_predict, x_true, y_true = self._get_generated_distribution()
 
-        # TODO: Reshape features
-
-        print(y_predict.shape)
-        exit()
+        y_predict = y_predict.view(y_predict.shape[0], -1)
+        x_true = x_true.view(x_true.shape[0], -1)
+        y_true = y_true.view(y_true.shape[0], -1)
 
         # mean estimations
         y_true = y_true.to(x_true.device)
