@@ -38,7 +38,7 @@ if __name__ == '__main__':
     )
     checkpoint_callback = ModelCheckpoint(
         monitor='psnr_val',
-        mode='min',
+        mode='max',
         dirpath=cfg.checkpoint_dir + args.exp_name + '/',
         filename='best',
         save_top_k=1
