@@ -1,4 +1,4 @@
-checkpoint_dir: "/storage/matt_models/mnist"
+checkpoint_dir: "/storage/matt_models/mnist/"
 
 K: 5
 
