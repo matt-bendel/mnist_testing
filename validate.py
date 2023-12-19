@@ -36,6 +36,7 @@ if __name__ == '__main__':
     best_cfid = 100000000
 
     embedding = MNISTAutoencoder.load_from_checkpoint('/storage/matt_models/mnist/autoencoder/best.ckpt').autoencoder
+    embedding.eval()
 
     for epoch in range(0, 50):
         print(epoch)
@@ -46,8 +47,7 @@ if __name__ == '__main__':
 
         cfid = CFIDMetric(model, dm.val_dataloader(), embedding, embedding, True)
 
-        model.eval().to('cpu')
-        posterior_cov_hat = numpy.zeros((args.d, args.d))
+        model.eval()
 
         cfid_val = cfid.get_cfid_torch_pinv()
         print(cfid_val)
