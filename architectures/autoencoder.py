@@ -15,15 +15,15 @@ class Autoencoder(nn.Module):
                   nn.LeakyReLU(negative_slope=0.2),
                   nn.AvgPool2d(2, stride=2, padding=1),
                   nn.Conv2d(width, width, kernel_size=3, padding=1, stride=1),
-                  nn.LeakyReLU(negative_slope=0.2)(),
+                  nn.LeakyReLU(negative_slope=0.2),
                   nn.AvgPool2d(2, stride=2, padding=0)]
         self.encoder = nn.Sequential(*layers)
 
         modules = []
         modules += [[nn.Conv2d(width, width, kernel_size=3, stride=1, padding=1),
-                     nn.LeakyReLU(negative_slope=0.2)()]]
+                     nn.LeakyReLU(negative_slope=0.2)]]
         modules += [[nn.Conv2d(width, width, kernel_size=3, stride=1, padding=1),
-                     nn.LeakyReLU(negative_slope=0.2)()]]
+                     nn.LeakyReLU(negative_slope=0.2)]]
         modules += [[nn.Conv2d(width, 1, kernel_size=3, stride=1, padding=1)]]
         self.decoders = []
         for module in modules:
