@@ -71,7 +71,7 @@ class MNISTAutoencoder(pl.LightningModule):
         sch.step(self.trainer.callback_metrics["psnr_val"])
 
     def configure_optimizers(self):
-        opt_mean = torch.optim.Adam(self.mean_net.parameters(), lr=self.args.lr,
+        opt_mean = torch.optim.Adam(self.autoencoder.parameters(), lr=self.args.lr,
                                     betas=(self.args.beta_1, self.args.beta_2))
         reduce_lr_on_plateau = torch.optim.lr_scheduler.ReduceLROnPlateau(
             opt_mean,
