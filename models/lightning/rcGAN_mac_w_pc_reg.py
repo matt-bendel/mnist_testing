@@ -8,10 +8,9 @@ import matplotlib.pyplot as plt
 from architectures.unet import Unet
 from architectures.discriminator import Discriminator
 from torchmetrics.functional import peak_signal_noise_ratio
-from models.lightning.PCANET_mac import PCANET
 
 
-class rcGAN(pl.LightningModule):
+class rcGANWReg(pl.LightningModule):
     def __init__(self, args, exp_name):
         super().__init__()
         self.args = args
@@ -31,10 +30,8 @@ class rcGAN(pl.LightningModule):
         self.resolution = self.args.im_size
         self.betastd = 1
         self.beta_pca = 1e-3
+        self.lam_eps = 0
         self.automatic_optimization = False
-        self.pca_net = PCANET.load_from_checkpoint(args.checkpoint_dir + "pca_run_lamda_1" + '/best-pca.ckpt')
-        self.pca_net.eval()
-        self.pca_net.mean_net.eval()
         self.val_outputs = []
 
         self.save_hyperparameters()  # Save passed values
@@ -169,26 +166,30 @@ class rcGAN(pl.LightningModule):
             w_loss = 0
             sig_loss = 0
 
+            # P_PCA = 10*K
+
             for n in range(gens_zm.shape[0]):
                 _, S, Vh = torch.linalg.svd(gens_zm[n], full_matrices=False)
 
-                current_x_xm = x_zm[n]
-                inner_product = torch.sum(Vh * current_x_xm.view(-1)[None, :], dim=1)
+                current_x_xm = x_zm[n, 0, :]
+                inner_product = torch.sum(Vh * current_x_xm[None, :], dim=1)
 
                 w_obj = inner_product ** 2
-                w_loss += 1e-6 * w_obj.sum()  # 1e-3 for 25 iters
+                w_loss += 1 / (torch.norm(current_x_xm, p=2) ** 2 * (self.args.num_z_pca//10)).detach() * w_obj[0:self.args.num_z_pca//10].sum()  # 1e-3 for 25 iters
 
                 gens_zm_det = gens_zm[n].detach()
-                gens_zm_det[0, :] = x_zm[n].view(-1).detach()
+                gens_zm_det[0, :] = x_zm[n, 0, :].view(-1).detach()
 
-                if self.current_epoch >= 50:
+                if self.current_epoch >= 40:
                     inner_product_mat = 1 / self.args.num_z_pca * torch.matmul(Vh, torch.matmul(
                         torch.transpose(gens_zm_det.clone().detach(), 0, 1), torch.matmul(gens_zm_det.clone().detach(), Vh.mT)))
-                    sig_diff = (1 - 1 / (S ** 2) * torch.diag(inner_product_mat.clone().detach())) ** 2
 
-                    sig_loss += 1e-5 * sig_diff.sum()
+                    #cfg 1
+                    sig_diff = 1 / (torch.norm(current_x_xm, p=2) ** 2 * (self.args.num_z_pca//10)).detach() * (1 - 1 / (S ** 2 + self.lam_eps) * torch.diag(inner_product_mat.clone().detach())) ** 2
 
-            w_loss_g = -w_loss
+                    sig_loss += self.beta_pca * sig_diff[0:self.args.num_z_pca//10].sum()
+
+            w_loss_g = - self.beta_pca * w_loss
             self.log('w_loss', w_loss_g, prog_bar=True)
             self.log('sig_loss', sig_loss, prog_bar=True)
             g_loss += w_loss_g
@@ -274,7 +275,7 @@ class rcGAN(pl.LightningModule):
 
         reduce_lr_on_plateau_mean = torch.optim.lr_scheduler.ReduceLROnPlateau(
             opt_g,
-            mode='max',
+            mode='min',
             factor=0.1,
             patience=5,
             min_lr=5e-6,

@@ -129,6 +129,13 @@ class CFIDMetric:
         self.gen_embeds, self.cond_embeds, self.true_embeds = None, None, None
         self.num_samps = num_samps
 
+    def get_embeddings(self, x, y, x_hat):
+        img_e = self.image_embedding(x_hat, features=True)
+        cond_e = self.condition_embedding(y, features=True)
+        true_e = self.image_embedding(x, features=True)
+
+        return img_e, cond_e, true_e
+
     def _get_generated_distribution(self):
         image_embed = []
         cond_embed = []
