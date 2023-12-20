@@ -12,6 +12,9 @@ from models.lightning.rcGAN_mac_w_pc_reg import rcGANWReg
 from data.lightning.MNISTDataModule import MNISTDataModule
 from matplotlib import gridspec
 import sklearn.preprocessing
+from data.lightning.MNISTDataModule import MNISTDataModule
+from metrics.cfid import CFIDMetric
+from models.lightning.mnist_autoencoder import MNISTAutoencoder
 
 def load_object(dct):
     return types.SimpleNamespace(**dct)
@@ -30,19 +33,30 @@ if __name__ == '__main__':
 
     mps_device = torch.device("mps")
 
-    model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best-mse.ckpt').to(mps_device)
+    model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best.ckpt').to(mps_device)
     model.eval()
+    model = model.cuda()
 
-    model_lazy = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best-mse.ckpt')
+    model_lazy = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '_w_reg/best.ckpt')
+    model_lazy.eval()
+    model_lazy = model_lazy.cuda()
 
     dm = MNISTDataModule()
     dm.setup()
     test_loader = dm.test_dataloader()
 
+    embedding = MNISTAutoencoder.load_from_checkpoint('/storage/matt_models/mnist/autoencoder/best.ckpt').autoencoder
+    embedding.eval()
+
+    cfid = CFIDMetric(model, dm.val_dataloader(), embedding, embedding, True)
+
+    cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv()
+    print(cfid_val)
+
     with torch.no_grad():
         for i, data in enumerate(test_loader):
             x, _ = data
-            x = x.to(mps_device)
+            x = x.cuda()
             mask = torch.ones(x.size(0), 1, 28, 28).to(x.device)
             mask[:, :, 0:21, :] = 0
             y = x * mask
