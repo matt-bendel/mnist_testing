@@ -151,7 +151,7 @@ class rcGANWReg(pl.LightningModule):
         g_loss = self.adversarial_loss_generator(y, gens)
         g_loss += self.l1_std_p(avg_recon, gens, x)
 
-        if (self.global_step - 1) % self.args.pca_reg_freq == 0 and self.current_epoch >= 20:
+        if (self.global_step - 1) % self.args.pca_reg_freq == 0 and self.current_epoch >= 0:
             gens = torch.zeros(
                 size=(y.size(0), self.args.num_z_pca, self.args.in_chans, self.args.im_size, self.args.im_size),
                 device=self.device)
@@ -171,6 +171,11 @@ class rcGANWReg(pl.LightningModule):
 
             for n in range(gens_zm.shape[0]):
                 _, S, Vh = torch.linalg.svd(gens_zm[n], full_matrices=False)
+
+                print(x_zm.shape)
+                print(Vh.shape)
+                print(gens_zm.shape)
+                exit()
 
                 current_x_xm = x_zm[n, :]
                 inner_product = torch.sum(Vh * current_x_xm[None, :], dim=1)
