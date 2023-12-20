@@ -117,7 +117,7 @@ class CFIDMetric:
                  cuda=False,
                  args=None,
                  eps=1e-6,
-                 num_samps=1):
+                 num_samps=8):
 
         self.gan = gan
         self.args = args

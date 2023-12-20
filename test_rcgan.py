@@ -8,6 +8,7 @@ import numpy as np
 from utils.parse_args import create_arg_parser
 from pytorch_lightning import seed_everything
 from models.lightning.rcGAN_mac import rcGAN
+from models.lightning.rcGAN_mac_w_pc_reg import rcGANWReg
 from data.lightning.MNISTDataModule import MNISTDataModule
 from matplotlib import gridspec
 import sklearn.preprocessing
@@ -31,6 +32,8 @@ if __name__ == '__main__':
 
     model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best-mse.ckpt').to(mps_device)
     model.eval()
+
+    model_lazy = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best-mse.ckpt')
 
     dm = MNISTDataModule()
     dm.setup()

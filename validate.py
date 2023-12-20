@@ -42,10 +42,9 @@ if __name__ == '__main__':
     for epoch in range(50, 100):
         print(epoch)
         model = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + f'/checkpoint-epoch={epoch}.ckpt')
+        model.eval()
 
         cfid = CFIDMetric(model, dm.val_dataloader(), embedding, embedding, True)
-
-        model.eval()
 
         cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv()
         print(cfid_val)
