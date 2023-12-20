@@ -186,7 +186,7 @@ class CFIDMetric:
 
     def get_cfid_torch_pinv(self, y_predict=False, y_true=False, x_true=False):
         # if not y_predict:
-        y_predict, x_true, y_true = self._get_generated_distribution()
+        # y_predict, x_true, y_true = self._get_generated_distribution()
 
         y_predict = y_predict.view(y_predict.shape[0], -1)
         x_true = x_true.view(x_true.shape[0], -1)
