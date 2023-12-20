@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 from architectures.unet import Unet
 from architectures.discriminator import Discriminator
 from torchmetrics.functional import peak_signal_noise_ratio
-
+from models.lightning.mnist_autoencoder import MNISTAutoencoder
+from metrics.cfid import CFIDMetric
 
 class rcGANWReg(pl.LightningModule):
     def __init__(self, args, exp_name):
@@ -27,13 +28,18 @@ class rcGANWReg(pl.LightningModule):
         self.discriminator = Discriminator(
             in_chans=self.in_chans * 2
         )
+
+        self.autoencoder = MNISTAutoencoder.load_from_checkpoint(
+            '/storage/matt_models/mnist/autoencoder/best.ckpt').autoencoder
+        self.autoencoder.eval()
+
         self.resolution = self.args.im_size
         self.betastd = 1
-        self.beta_pca = 1
+        self.beta_pca = 1e-3
         self.lam_eps = 0
         self.automatic_optimization = False
         self.val_outputs = []
-
+        self.cfid = CFIDMetric(None, None, None, None)
         self.save_hyperparameters()  # Save passed values
 
     def readd_measures(self, samples, measures):
@@ -214,17 +220,21 @@ class rcGANWReg(pl.LightningModule):
             size=(y.size(0), self.args.num_z_valid, self.args.in_chans, self.args.im_size, self.args.im_size),
             device=self.device)
         for z in range(self.args.num_z_valid):
-            gens[:, z, :, :, :] = self.forward(y) * 0.3081 + 0.1307
+            gens[:, z, :, :, :] = self.forward(y)
+
+        img_e = self.autoencoder(gens[:, 0, :, :, :], features=True)
+        cond_e = self.autoencoder(y, features=True)
+        true_e = self.autoencoder(x, features=True)
 
         x = x * 0.3081 + 0.1307
         y = y * 0.3081 + 0.1307
 
         avg = torch.mean(gens, dim=1)
 
-        psnr_8 = peak_signal_noise_ratio(avg, x)
-        psnr_1 = peak_signal_noise_ratio(gens[:, 0, :, :, :], x)
+        psnr_8 = peak_signal_noise_ratio(avg * 0.3081 + 0.1307, x)
+        psnr_1 = peak_signal_noise_ratio(gens[:, 0, :, :, :] * 0.3081 + 0.1307, x)
 
-        self.val_outputs.append({'psnr_8': psnr_8, 'psnr_1': psnr_1})
+        self.val_outputs.append({'psnr_8': psnr_8, 'psnr_1': psnr_1, 'img_e': img_e, 'cond_e': cond_e, 'true_e': true_e})
 
         if batch_idx <= 2:
             if self.global_rank == 0:
@@ -245,11 +255,19 @@ class rcGANWReg(pl.LightningModule):
 
             self.trainer.strategy.barrier()
 
-        return {'psnr_8': psnr_8, 'psnr_1': psnr_1}
+        return {'psnr_8': psnr_8, 'psnr_1': psnr_1, 'img_e': img_e, 'cond_e': cond_e, 'true_e': true_e}
 
     def on_validation_epoch_end(self):
         psnr_8 = torch.stack([x['psnr_8'] for x in self.val_outputs]).mean().mean()
         psnr_1 = torch.stack([x['psnr_1'] for x in self.val_outputs]).mean().mean()
+
+        true_embed = torch.cat([x['tru_e'] for x in self.val_outputs], dim=0)
+        image_embed = torch.cat([x['img_e'] for x in self.val_outputs], dim=0)
+        cond_embed = torch.cat([x['cond_e'] for x in self.val_outputs], dim=0)
+
+        cfid, _, _ = self.cfid.get_cfid_torch_pinv(image_embed, true_embed, cond_embed)
+
+        self.log('cfid', cfid, prog_bar=True)
 
         self.log('psnr_8', psnr_8)
         self.log('psnr_1', psnr_1)
@@ -261,12 +279,10 @@ class rcGANWReg(pl.LightningModule):
 
         self.val_outputs = []
 
-    # def on_train_epoch_end(self):
+    def on_train_epoch_end(self):
+        sch_g, _ = self.lr_schedulers()
 
-    # if self.current_epoch >= 50:
-    #     sch_mean, _ = self.lr_schedulers()
-    #
-    #     sch_mean.step(self.trainer.callback_metrics["psnr_8"])
+        sch_g.step(self.trainer.callback_metrics["cfid"])
 
     def configure_optimizers(self):
         opt_g = torch.optim.Adam(self.generator.parameters(), lr=self.args.lr,
@@ -277,9 +293,9 @@ class rcGANWReg(pl.LightningModule):
         reduce_lr_on_plateau_mean = torch.optim.lr_scheduler.ReduceLROnPlateau(
             opt_g,
             mode='min',
-            factor=0.1,
+            factor=0.5,
             patience=5,
-            min_lr=5e-6,
+            min_lr=5e-5,
         )
 
         reduce_lr_on_plateau_d = torch.optim.lr_scheduler.ReduceLROnPlateau(
