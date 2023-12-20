@@ -39,7 +39,7 @@ if __name__ == '__main__':
     embedding = MNISTAutoencoder.load_from_checkpoint('/storage/matt_models/mnist/autoencoder/best.ckpt').autoencoder
     embedding.eval()
 
-    for epoch in range(100, 150):
+    for epoch in range(50, 100):
         print(epoch)
         model = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + f'/checkpoint-epoch={epoch}.ckpt')
 
