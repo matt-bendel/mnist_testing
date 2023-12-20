@@ -8,6 +8,7 @@ import json
 from utils.parse_args import create_arg_parser
 from pytorch_lightning import seed_everything
 from models.lightning.rcGAN_mac import rcGAN
+from models.lightning.rcGAN_mac_w_pc_reg import rcGANWReg
 from models.lightning.mnist_autoencoder import MNISTAutoencoder
 from data.lightning.MNISTDataModule import MNISTDataModule
 from metrics.cfid import CFIDMetric
@@ -40,10 +41,7 @@ if __name__ == '__main__':
 
     for epoch in range(100, 150):
         print(epoch)
-        if epoch == 0:
-            model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + f'/best-mse.ckpt')
-        else:
-            model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + f'/best-mse-v{epoch}.ckpt')
+        model = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + f'/checkpoint-epoch={epoch}.ckpt')
 
         cfid = CFIDMetric(model, dm.val_dataloader(), embedding, embedding, True)
 
