@@ -266,7 +266,6 @@ class rcGANWReg(pl.LightningModule):
         cond_embed = torch.cat([x['cond_e'] for x in self.val_outputs], dim=0)
 
         cfid, _, _ = self.cfid.get_cfid_torch_pinv(image_embed, true_embed, cond_embed)
-        print(cfid)
 
         self.log('cfid', cfid, prog_bar=True)
 
