@@ -29,7 +29,7 @@ class rcGANWReg(pl.LightningModule):
         )
         self.resolution = self.args.im_size
         self.betastd = 1
-        self.beta_pca = 1e-3
+        self.beta_pca = 1
         self.lam_eps = 0
         self.automatic_optimization = False
         self.val_outputs = []
@@ -151,7 +151,7 @@ class rcGANWReg(pl.LightningModule):
         g_loss = self.adversarial_loss_generator(y, gens)
         g_loss += self.l1_std_p(avg_recon, gens, x)
 
-        if (self.global_step - 1) % self.args.pca_reg_freq == 0 and self.current_epoch >= 0:
+        if (self.global_step - 1) % self.args.pca_reg_freq == 0 and self.current_epoch >= 20:
             gens = torch.zeros(
                 size=(y.size(0), self.args.num_z_pca, self.args.in_chans, self.args.im_size, self.args.im_size),
                 device=self.device)
