@@ -38,7 +38,7 @@ if __name__ == '__main__':
     embedding = MNISTAutoencoder.load_from_checkpoint('/storage/matt_models/mnist/autoencoder/best.ckpt').autoencoder
     embedding.eval()
 
-    for epoch in range(0, 50):
+    for epoch in range(100, 150):
         print(epoch)
         if epoch == 0:
             model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + f'/best-mse.ckpt')
