@@ -261,7 +261,7 @@ class rcGANWReg(pl.LightningModule):
         psnr_8 = torch.stack([x['psnr_8'] for x in self.val_outputs]).mean().mean()
         psnr_1 = torch.stack([x['psnr_1'] for x in self.val_outputs]).mean().mean()
 
-        true_embed = torch.cat([x['tru_e'] for x in self.val_outputs], dim=0)
+        true_embed = torch.cat([x['true_e'] for x in self.val_outputs], dim=0)
         image_embed = torch.cat([x['img_e'] for x in self.val_outputs], dim=0)
         cond_embed = torch.cat([x['cond_e'] for x in self.val_outputs], dim=0)
 
