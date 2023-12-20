@@ -172,12 +172,10 @@ class rcGANWReg(pl.LightningModule):
             for n in range(gens_zm.shape[0]):
                 _, S, Vh = torch.linalg.svd(gens_zm[n], full_matrices=False)
 
-                print(x_zm.shape)
-                print(Vh.shape)
-                print(gens_zm.shape)
-                exit()
-
                 current_x_xm = x_zm[n, :]
+
+                print(current_x_xm.shape)
+                exit()
                 inner_product = torch.sum(Vh * current_x_xm[None, :], dim=1)
 
                 w_obj = inner_product ** 2
