@@ -31,8 +31,6 @@ if __name__ == '__main__':
         cfg = yaml.load(f, Loader=yaml.FullLoader)
         cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
-    mps_device = torch.device("mps")
-
     model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best.ckpt').to(mps_device)
     model.eval()
     model = model.cuda()
