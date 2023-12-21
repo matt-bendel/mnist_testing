@@ -31,13 +31,11 @@ if __name__ == '__main__':
         cfg = yaml.load(f, Loader=yaml.FullLoader)
         cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
-    model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best.ckpt').to(mps_device)
+    model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best.ckpt').cuda()
     model.eval()
-    model = model.cuda()
 
-    model_lazy = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '_w_reg/best.ckpt')
+    model_lazy = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '_w_reg/best.ckpt').cuda()
     model_lazy.eval()
-    model_lazy = model_lazy.cuda()
 
     dm = MNISTDataModule()
     dm.setup()
