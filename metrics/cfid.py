@@ -145,6 +145,7 @@ class CFIDMetric:
                             desc='Computing generated distribution',
                             total=len(self.loader)):
             x, _ = data
+            x = x.cuda()
             mask = torch.ones(x.size(0), 1, 28, 28).to(x.device)
             mask[:, :, 0:21, :] = 0
             y = x * mask

@@ -53,6 +53,7 @@ if __name__ == '__main__':
 
     cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv()
     print(cfid_val)
+    exit()
 
     with torch.no_grad():
         for i, data in enumerate(test_loader):
@@ -61,6 +62,7 @@ if __name__ == '__main__':
             mask = torch.ones(x.size(0), 1, 28, 28).to(x.device)
             mask[:, :, 0:21, :] = 0
             y = x * mask
+            print(y.device)
             fig_count = 0
             x = (x - 0.1307) / 0.3081
             y = (y - 0.1307) / 0.3081
