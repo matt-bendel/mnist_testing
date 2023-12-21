@@ -41,7 +41,7 @@ if __name__ == '__main__':
     dm.setup()
     test_loader = dm.test_dataloader()
 
-    embedding = MNISTAutoencoder.load_from_checkpoint('/storage/matt_models/mnist/autoencoder/best.ckpt').autoencoder
+    embedding = MNISTAutoencoder.load_from_checkpoint('/storage/matt_models/mnist/autoencoder/best.ckpt').autoencoder.cuda()
     embedding.eval()
 
     cfid = CFIDMetric(model, dm.val_dataloader(), embedding, embedding, True)
