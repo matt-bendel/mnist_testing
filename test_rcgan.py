@@ -53,6 +53,11 @@ if __name__ == '__main__':
     cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv()
     print(cfid_val)
 
+    cfid = CFIDMetric(model_lazy, dm.val_dataloader(), embedding, embedding, True)
+
+    cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv()
+    print(cfid_val)
+
     with torch.no_grad():
         for i, data in enumerate(test_loader):
             x, _ = data
