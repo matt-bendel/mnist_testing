@@ -224,9 +224,9 @@ class rcGANWReg(pl.LightningModule):
         for z in range(self.args.num_z_valid):
             gens[:, z, :, :, :] = self.forward(y)
 
-        img_e = self.autoencoder(gens[:, 0, :, :, :], features=True)
-        cond_e = self.autoencoder(y, features=True)
-        true_e = self.autoencoder(x, features=True)
+        # img_e = self.autoencoder(gens[:, 0, :, :, :], features=True)
+        # cond_e = self.autoencoder(y, features=True)
+        # true_e = self.autoencoder(x, features=True)
 
         x = x * 0.3081 + 0.1307
         y = y * 0.3081 + 0.1307
@@ -236,7 +236,7 @@ class rcGANWReg(pl.LightningModule):
         psnr_8 = peak_signal_noise_ratio(avg * 0.3081 + 0.1307, x)
         psnr_1 = peak_signal_noise_ratio(gens[:, 0, :, :, :] * 0.3081 + 0.1307, x)
 
-        self.val_outputs.append({'psnr_8': psnr_8, 'psnr_1': psnr_1, 'img_e': img_e, 'cond_e': cond_e, 'true_e': true_e})
+        self.val_outputs.append({'psnr_8': psnr_8, 'psnr_1': psnr_1, 'img_e': gens[:, 0, :, :, :], 'cond_e': y, 'true_e': x})
 
         if batch_idx <= 2:
             if self.global_rank == 0:
@@ -257,7 +257,7 @@ class rcGANWReg(pl.LightningModule):
 
             self.trainer.strategy.barrier()
 
-        return {'psnr_8': psnr_8, 'psnr_1': psnr_1, 'img_e': img_e, 'cond_e': cond_e, 'true_e': true_e}
+        return {'psnr_8': psnr_8, 'psnr_1': psnr_1, 'img_e': gens[:, 0, :, :, :], 'cond_e': y, 'true_e': x}
 
     def on_validation_epoch_end(self):
         psnr_8 = torch.stack([x['psnr_8'] for x in self.val_outputs]).mean().mean()
