@@ -160,9 +160,9 @@ class CFIDMetric:
                     condition_im = y
                     true_im = x
 
-                    img_e = self.image_embedding(image, features=True)
-                    cond_e = self.condition_embedding(condition_im, features=True)
-                    true_e = self.image_embedding(true_im, features=True)
+                    img_e = image #self.image_embedding(image, features=True)
+                    cond_e = condition_im # self.condition_embedding(condition_im, features=True)
+                    true_e = true_im # self.image_embedding(true_im, features=True)
 
                     if self.cuda:
                         true_embed.append(true_e)

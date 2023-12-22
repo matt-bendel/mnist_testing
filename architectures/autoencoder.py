@@ -2,6 +2,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+# TODO: Fix compression
+# TODO: SwAV
+
 class Autoencoder(nn.Module):
     """ Autoencoder adapted from [1]
 

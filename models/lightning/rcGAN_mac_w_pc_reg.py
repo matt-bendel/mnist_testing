@@ -11,6 +11,8 @@ from torchmetrics.functional import peak_signal_noise_ratio
 from models.lightning.mnist_autoencoder import MNISTAutoencoder
 from metrics.cfid import CFIDMetric
 
+# TODO: Optuna
+
 class rcGANWReg(pl.LightningModule):
     def __init__(self, args, exp_name):
         super().__init__()
