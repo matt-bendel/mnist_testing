@@ -37,7 +37,7 @@ class rcGANWReg(pl.LightningModule):
 
         self.resolution = self.args.im_size
         self.betastd = 1
-        self.beta_pca = 1e-3
+        self.beta_pca = 1
         self.lam_eps = 0
         self.automatic_optimization = False
         self.val_outputs = []
