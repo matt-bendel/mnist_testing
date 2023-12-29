@@ -15,7 +15,7 @@ batch_size: 64
 num_epochs: 125
 
 #optimizer:
-lr: 0.0001
+lr: 0.001
 beta_1: 0
 beta_2: 0.99
 gp_weight: 10
