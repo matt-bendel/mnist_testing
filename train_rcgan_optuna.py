@@ -20,13 +20,14 @@ def load_object(dct):
     return types.SimpleNamespace(**dct)
 
 
-def objective(trial, cfg, args):
-    # We optimize the number of layers, hidden units in each layer and dropouts.
-    n_layers = trial.suggest_int("n_layers", 1, 3)
-    dropout = trial.suggest_float("dropout", 0.2, 0.5)
-    output_dims = [
-        trial.suggest_int("n_units_l{}".format(i), 4, 128, log=True) for i in range(n_layers)
-    ]
+def objective(trial):
+    with open('configs/rcgan.yml', 'r') as f:
+        cfg = yaml.load(f, Loader=yaml.FullLoader)
+        cfg = json.loads(json.dumps(cfg), object_hook=load_object)
+
+    args = create_arg_parser().parse_args()
+
+    print(f"Experiment Name: {args.exp_name}")
 
     start_lr = trial.suggest_float("start_lr", 1e-3, 1e-4)
     beta_pca = trial.suggest_float('beta_pca', 1e-3, 1)
@@ -48,10 +49,8 @@ def objective(trial, cfg, args):
 
 if __name__ == '__main__':
     torch.set_float32_matmul_precision('medium')
-    args = create_arg_parser().parse_args()
     seed_everything(0, workers=True)
 
-    print(f"Experiment Name: {args.exp_name}")
 
     with open('configs/rcgan.yml', 'r') as f:
         cfg = yaml.load(f, Loader=yaml.FullLoader)
