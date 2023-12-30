@@ -32,7 +32,7 @@ def objective(trial):
     start_lr = trial.suggest_float("start_lr", 1e-4, 1e-3)
     beta_pca = trial.suggest_float('beta_pca', 1e-3, 1)
     patience = trial.suggest_int('lr_patience', 5, 20)
-    lr_step = trial.suggest_float('lr_patience', 0.5, 0.99)
+    lr_step = trial.suggest_float('lr_step', 0.5, 0.99)
 
     model = rcGANWRegOptuna(cfg, args.exp_name, start_lr, beta_pca, patience, lr_step)
     dm = MNISTDataModule()
