@@ -59,7 +59,7 @@ if __name__ == '__main__':
     pruner = optuna.pruners.NopPruner()
 
     study = optuna.create_study(direction="minimize", pruner=pruner)
-    study.optimize(objective, n_trials=100)
+    study.optimize(objective, n_trials=50)
 
     print("Number of finished trials: {}".format(len(study.trials)))
 
