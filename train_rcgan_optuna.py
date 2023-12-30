@@ -38,7 +38,7 @@ def objective(trial):
     dm = MNISTDataModule()
 
     trainer = pl.Trainer(accelerator="gpu", strategy='ddp', devices=1, enable_checkpointing=False,
-                         max_epochs=cfg.num_epochs,
+                         max_epochs=75,
                          num_sanity_val_steps=2, profiler="simple", logger=True, benchmark=False,
                          log_every_n_steps=10)
 
