@@ -447,21 +447,24 @@ class rcGANWRegLatent(pl.LightningModule):
         # TODO: Feature space
 
         gens = torch.zeros(
-            size=(y.size(0), self.args.num_z_train, 8, 7, 7),
+            size=(y.size(0), self.args.num_z_train, 1, 28, 28),
             device=self.device)
         for z in range(self.args.num_z_train):
             gens[:, z, :, :, :] = self.forward(y)
 
         g_loss = self.adversarial_loss_generator(y, gens)
 
+        new_gens = torch.zeros(
+            size=(y.size(0), self.args.num_z_train, 8, 7, 7),
+            device=self.device)
         for z in range(self.args.num_z_train):
-            gens[:, z, :, :, :] = self.autoencoder(gens[:, z, :, :, :], features=True)
+            new_gens[:, z, :, :, :] = self.autoencoder(gens[:, z, :, :, :], features=True)
 
-        avg_recon = torch.mean(gens, dim=1)
+        avg_recon = torch.mean(new_gens, dim=1)
 
-        g_loss += self.l1_std_p(avg_recon, gens, self.autoencoder(x, features=True))
+        g_loss += self.l1_std_p(avg_recon, new_gens, self.autoencoder(x, features=True))
 
-        if (self.global_step - 1) % self.args.pca_reg_freq == 0 and self.current_epoch >= 10:
+        if (self.global_step - 1) % self.args.pca_reg_freq == 0 and self.current_epoch >= 15:
             gens = torch.zeros(
                 size=(y.size(0), self.args.num_z_pca, 8, 7, 7),
                 device=self.device)
@@ -491,7 +494,7 @@ class rcGANWRegLatent(pl.LightningModule):
                 gens_zm_det = gens_zm[n].detach()
                 gens_zm_det[0, :] = x_zm[n, :].view(-1).detach()
 
-                if self.current_epoch >= 20:
+                if self.current_epoch >= 30:
                     inner_product_mat = 1 / self.args.num_z_pca * torch.matmul(Vh, torch.matmul(
                         torch.transpose(gens_zm_det.clone().detach(), 0, 1), torch.matmul(gens_zm_det.clone().detach(), Vh.mT)))
 
