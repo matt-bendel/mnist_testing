@@ -6,7 +6,7 @@ from torchvision.datasets import MNIST
 class MNISTDataModule(pl.LightningDataModule):
     def __init__(self):
         super().__init__()
-        self.batch_size = 128
+        self.batch_size = 64
         self.num_workers = 4
         self.data_dir = "/storage/matt_models/mnist"
 

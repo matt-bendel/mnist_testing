@@ -423,8 +423,8 @@ class rcGANLatent(pl.LightningModule):
         return {'psnr_8': psnr_8, 'psnr_1': psnr_1}
 
     def on_validation_epoch_end(self):
-        psnr_8 = torch.stack([x['psnr_8'] for x in self.val_outputs]).mean().mean()
-        psnr_1 = torch.stack([x['psnr_1'] for x in self.val_outputs]).mean().mean()
+        psnr_8 = self.all_gather(torch.stack([x['psnr_8'] for x in self.val_outputs]).mean()).mean()
+        psnr_1 = self.all_gather(torch.stack([x['psnr_1'] for x in self.val_outputs]).mean()).mean()
 
         self.log('psnr_8', psnr_8)
         self.log('psnr_1', psnr_1)
