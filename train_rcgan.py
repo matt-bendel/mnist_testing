@@ -10,7 +10,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from utils.parse_args import create_arg_parser
 from pytorch_lightning import seed_everything
 from pytorch_lightning.loggers import WandbLogger
-from models.lightning.rcGAN_mac import rcGAN
+from models.lightning.rcGAN_mac import rcGAN, rcGANLatent
 from data.lightning.MNISTDataModule import MNISTDataModule
 from models.lightning.rcGAN_mac_w_pc_reg import rcGANWReg
 
@@ -28,7 +28,7 @@ if __name__ == '__main__':
         cfg = yaml.load(f, Loader=yaml.FullLoader)
         cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
-    model = rcGANWReg(cfg, args.exp_name)
+    model = rcGANLatent(cfg, args.exp_name)
 
     dm = MNISTDataModule()
 
