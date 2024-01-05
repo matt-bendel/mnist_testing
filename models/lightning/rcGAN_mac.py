@@ -369,7 +369,7 @@ class rcGANLatent(pl.LightningModule):
 
         avg_recon = torch.mean(new_gens, dim=1)
 
-        g_loss += self.l1_std_p(avg_recon, new_gens, self.autoencoder(x))
+        g_loss += self.l1_std_p(avg_recon, new_gens, self.autoencoder(x, features=True))
 
         opt_g.zero_grad()
         self.manual_backward(g_loss)
