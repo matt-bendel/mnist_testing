@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     for epoch in range(75, 125):
         print(epoch)
-        model = rcGANLatent.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + f'/checkpoint-epoch={epoch}.ckpt')
+        model = rcGANWRegLatent.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + f'/checkpoint-epoch={epoch}.ckpt')
         model.eval().cuda()
 
         cfid = CFIDMetric(model, dm.val_dataloader(), embedding, embedding, True)
