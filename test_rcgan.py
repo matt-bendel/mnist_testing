@@ -53,7 +53,6 @@ if __name__ == '__main__':
 
     cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv() # 2.66, 10.60, 13.26
     print(cfid_val)
-    exit()
 
     with torch.no_grad():
         for i, data in enumerate(test_loader):
@@ -69,7 +68,7 @@ if __name__ == '__main__':
 
             gens = torch.zeros(size=(y.size(0), 128, 1, 28, 28), device=x.device)
             for z in range(128):
-                gens[:, z, :, :, :] = model.forward(y) * 0.3081 + 0.1307
+                gens[:, z, :, :, :] = model_lazy.forward(y) * 0.3081 + 0.1307
 
             x = x * 0.3081 + 0.1307
             y = y * 0.3081 + 0.1307
@@ -123,7 +122,7 @@ if __name__ == '__main__':
                 ax.set_yticks([])
                 ax.set_ylabel('error')
 
-                plt.savefig(f'test_ims_rcgan/x_y_x_hat_error_{i}.png')
+                plt.savefig(f'test_ims_rcgan_lazy/x_y_x_hat_error_{i}.png')
 
                 plt.close(fig)
 
@@ -142,9 +141,9 @@ if __name__ == '__main__':
 
                 single_samps = samps_np - avg_np[None, :, :]
 
-                cov_mat = np.zeros((128, avg_np.shape[-1] * avg_np.shape[-2]))
+                cov_mat = np.zeros((784, avg_np.shape[-1] * avg_np.shape[-2]))
 
-                for z in range(128):
+                for z in range(784):
                     cov_mat[z, :] = single_samps[z].flatten()
 
                 u, s, vh = np.linalg.svd(cov_mat, full_matrices=False)
@@ -152,8 +151,8 @@ if __name__ == '__main__':
                 print(s.shape)
 
                 plt.figure()
-                plt.scatter(range(5), sklearn.preprocessing.normalize(s))
-                plt.savefig(f'test_ims_rcgan/{args.exp_name}_pca_plot_sv_{i}.png')
+                plt.scatter(range(5), s)
+                plt.savefig(f'test_ims_rcgan_lazy/{args.exp_name}_pca_plot_sv_{i}.png')
                 plt.close()
 
                 for k in range(5):
@@ -169,6 +168,8 @@ if __name__ == '__main__':
                     if k == 0:
                         ax.set_title('w_i')
 
+                    pc_np = pc_np * s[k]
+
                     ax = plt.subplot(gs[k, 1])
                     ax.imshow(x_hat_np - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
                     ax.set_xticklabels([])
@@ -176,7 +177,7 @@ if __name__ == '__main__':
                     ax.set_xticks([])
                     ax.set_yticks([])
                     if k == 0:
-                        ax.set_title('x_hat - 3 w_i')
+                        ax.set_title('x_hat - 3 sigma_i w_i')
 
                     ax = plt.subplot(gs[k, 2])
                     ax.imshow(x_hat_np - 2 * pc_np, cmap='gray', vmin=0, vmax=1)
@@ -185,7 +186,7 @@ if __name__ == '__main__':
                     ax.set_xticks([])
                     ax.set_yticks([])
                     if k == 0:
-                        ax.set_title('x_hat - 2 w_i')
+                        ax.set_title('x_hat - 2 sigma_i w_i')
 
                     ax = plt.subplot(gs[k, 3])
                     ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
@@ -203,7 +204,7 @@ if __name__ == '__main__':
                     ax.set_xticks([])
                     ax.set_yticks([])
                     if k == 0:
-                        ax.set_title('x_hat + 2 w_i')
+                        ax.set_title('x_hat + 2 sigma_i w_i')
 
                     ax = plt.subplot(gs[k, 5])
                     ax.imshow(x_hat_np + 3 * pc_np, cmap='gray', vmin=0, vmax=1)
@@ -212,9 +213,9 @@ if __name__ == '__main__':
                     ax.set_xticks([])
                     ax.set_yticks([])
                     if k == 0:
-                        ax.set_title('x_hat + 3 w_i')
+                        ax.set_title('x_hat + 3 sigma_i w_i')
 
-                plt.savefig(f'test_ims_rcgan/{args.exp_name}_pca_plot_{i}.png')
+                plt.savefig(f'test_ims_rcgan_lazy/{args.exp_name}_pca_plot_{i}.png')
 
                 plt.close(fig)
             else:
