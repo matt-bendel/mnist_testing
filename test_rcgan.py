@@ -167,8 +167,6 @@ if __name__ == '__main__':
                     ax.set_ylabel(f'i={k+1}')
                     if k == 0:
                         ax.set_title('w_i')
-                    print(s.shape)
-                    pc_np = pc_np * s[0, k]
 
                     ax = plt.subplot(gs[k, 1])
                     ax.imshow(x_hat_np - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
