@@ -59,6 +59,7 @@ if __name__ == '__main__':
         weird_l2s = []
 
         for i, data in enumerate(test_loader):
+            print(f'{i}/{len(test_loader)}')
             x, _ = data
             x = x.cuda()
             mask = torch.ones(x.size(0), 1, 28, 28).to(x.device)
