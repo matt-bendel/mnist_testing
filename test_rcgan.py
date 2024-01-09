@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
             gens = torch.zeros(size=(y.size(0), 784, 1, 28, 28), device=x.device)
             for z in range(784):
-                gens[:, z, :, :, :] = model_lazy.forward(y) * 0.3081 + 0.1307
+                gens[:, z, :, :, :] = model.forward(y) * 0.3081 + 0.1307
 
             x = x * 0.3081 + 0.1307
             y = y * 0.3081 + 0.1307
