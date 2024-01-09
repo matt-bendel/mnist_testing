@@ -34,7 +34,7 @@ if __name__ == '__main__':
     model = rcGANLatent.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best.ckpt').cuda()
     model.eval()
 
-    model_lazy = rcGANWRegLatent.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '_w_reg_k=25/best.ckpt').cuda()
+    model_lazy = rcGANWRegLatent.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '_w_reg_k=5/best.ckpt').cuda()
     model_lazy.eval()
 
     dm = MNISTDataModule()
