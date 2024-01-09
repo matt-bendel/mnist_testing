@@ -88,11 +88,12 @@ if __name__ == '__main__':
 
             for n in range(x.shape[0]):
                 _, S, Vh = torch.linalg.svd(gens_zm[n], full_matrices=False)
-                vh = Vh.cpu().numpy()
-                s = S.cpu().numpy()
-                v = vh.transpose()
 
-                weird_l2s.append(np.linalg.norm(torch.unsqueeze(err[n, :], dim=1).cpu().numpy() - v @ vh @ torch.unsqueeze(err[n, :], dim=1).cpu().numpy()))
+                unsqueezed_err = torch.unsqueeze(err[n, :], dim=1)
+
+                weird_l2 = torch.norm(unsqueezed_err - torch.matmul(torch.matmul(Vh.transpose(), Vh), unsqueezed_err), p=2)
+
+                weird_l2s.append(weird_l2)
 
         print(f'L2: {np.mean(l2s)}')
         print(f'Weird L2: {np.mean(weird_l2s)}')
