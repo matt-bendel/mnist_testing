@@ -78,7 +78,8 @@ if __name__ == '__main__':
 
             avg = torch.mean(gens, dim=1)
 
-            # gens_zm = gens - avg[:, None, :, :, :]
+            gens_zm = gens - avg[:, None, :, :, :]
+            gens_zm = gens_zm.flatten(2)
 
             err = (x - avg).flatten(1)
             err_norm = err.norm(dim=1)
@@ -86,17 +87,9 @@ if __name__ == '__main__':
             l2s.append(err_norm.mean().cpu().numpy())
 
             for n in range(x.shape[0]):
-                samps_np = gens[n, :, 0, :, :].cpu().numpy()
-                avg_np = avg[n, 0, :, :].cpu().numpy()
-
-                single_samps = samps_np - avg_np[None, :, :]
-
-                cov_mat = np.zeros((128, avg_np.shape[-1] * avg_np.shape[-2]))
-
-                for z in range(128):
-                    cov_mat[z, :] = single_samps[z].flatten()
-
-                u, s, vh = np.linalg.svd(cov_mat, full_matrices=False)
+                _, S, Vh = torch.linalg.svd(gens_zm[n], full_matrices=False)
+                vh = vh.cpu().numpy()
+                s = s.cpu().numpy()
                 v = vh.transpose()
 
                 weird_l2s.append(np.linalg.norm(torch.unsqueeze(err[n, :], dim=1).cpu().numpy() - v @ vh @ torch.unsqueeze(err[n, :], dim=1).cpu().numpy()))
