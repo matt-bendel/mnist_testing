@@ -96,7 +96,7 @@ if __name__ == '__main__':
                 u, s, vh = np.linalg.svd(cov_mat, full_matrices=False)
                 v = vh.transpose()
 
-                weird_l2s.append(np.linalg.norm(torch.unsqueeze(err[n, :], dim=0).cpu().numpy() - v @ vh @ torch.unsqueeze(err[n, :], dim=0).cpu().numpy()))
+                weird_l2s.append(np.linalg.norm(torch.unsqueeze(err[n, :], dim=1).cpu().numpy() - v @ vh @ torch.unsqueeze(err[n, :], dim=1).cpu().numpy()))
 
         print(f'L2: {np.mean(l2s)}')
         print(f'Weird L2: {np.mean(weird_l2s)}')
