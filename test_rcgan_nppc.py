@@ -69,14 +69,16 @@ if __name__ == '__main__':
             x = (x - 0.1307) / 0.3081
             y = (y - 0.1307) / 0.3081
 
-            gens = torch.zeros(size=(y.size(0), 784, 1, 28, 28), device=x.device)
-            for z in range(784):
+            gens = torch.zeros(size=(y.size(0), 128, 1, 28, 28), device=x.device)
+            for z in range(128):
                 gens[:, z, :, :, :] = model.forward(y) * 0.3081 + 0.1307
 
             x = x * 0.3081 + 0.1307
             y = y * 0.3081 + 0.1307
 
             avg = torch.mean(gens, dim=1)
+
+            # gens_zm = gens - avg[:, None, :, :, :]
 
             err = (x - avg).flatten(1)
             err_norm = err.norm(dim=1)
@@ -89,9 +91,9 @@ if __name__ == '__main__':
 
                 single_samps = samps_np - avg_np[None, :, :]
 
-                cov_mat = np.zeros((50, avg_np.shape[-1] * avg_np.shape[-2]))
+                cov_mat = np.zeros((128, avg_np.shape[-1] * avg_np.shape[-2]))
 
-                for z in range(50):
+                for z in range(128):
                     cov_mat[z, :] = single_samps[z].flatten()
 
                 u, s, vh = np.linalg.svd(cov_mat, full_matrices=False)
