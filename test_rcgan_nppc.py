@@ -44,15 +44,15 @@ if __name__ == '__main__':
     embedding = MNISTAutoencoder.load_from_checkpoint('/storage/matt_models/mnist/autoencoder/best.ckpt').autoencoder.cuda()
     embedding.eval()
 
-    cfid = CFIDMetric(model, dm.val_dataloader(), embedding, embedding, True)
-
-    cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv() # 1.57, 12.89, 14.45
-    print(cfid_val)
-
-    cfid = CFIDMetric(model_lazy, dm.val_dataloader(), embedding, embedding, True)
-
-    cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv() # 2.66, 10.60, 13.26
-    print(cfid_val)
+    # cfid = CFIDMetric(model, dm.val_dataloader(), embedding, embedding, True)
+    #
+    # cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv() # 1.57, 12.89, 14.45
+    # print(cfid_val)
+    #
+    # cfid = CFIDMetric(model_lazy, dm.val_dataloader(), embedding, embedding, True)
+    #
+    # cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv() # 2.66, 10.60, 13.26
+    # print(cfid_val)
 
     with torch.no_grad():
         l2s = []
