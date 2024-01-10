@@ -34,21 +34,21 @@ weird_l2s = []
 with torch.no_grad():
     for i, batch in enumerate(dataloader):
         x_org, x_distorted, x_restored = nppc_model.process_batch(batch)
-        plt.figure()
-        plt.imshow(x_org[0, 0, :, :].cpu().numpy(), cmap='gray')
-        plt.savefig('gt.png')
-        plt.close()
-
-        plt.figure()
-        plt.imshow(x_distorted[0, 0, :, :].cpu().numpy(), cmap='gray')
-        plt.savefig('distorted.png')
-        plt.close()
-
-        plt.figure()
-        plt.imshow(x_restored[0, 0, :, :].cpu().numpy(), cmap='gray')
-        plt.savefig('restored.png')
-        plt.close()
-        exit()
+        # plt.figure()
+        # plt.imshow(x_org[0, 0, :, :].cpu().numpy(), cmap='gray')
+        # plt.savefig('gt.png')
+        # plt.close()
+        #
+        # plt.figure()
+        # plt.imshow(x_distorted[0, 0, :, :].cpu().numpy(), cmap='gray')
+        # plt.savefig('distorted.png')
+        # plt.close()
+        #
+        # plt.figure()
+        # plt.imshow(x_restored[0, 0, :, :].cpu().numpy(), cmap='gray')
+        # plt.savefig('restored.png')
+        # plt.close()
+        # exit()
 
         w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=False, use_ddp=False)
 
