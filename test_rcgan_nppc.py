@@ -91,7 +91,7 @@ if __name__ == '__main__':
 
                 unsqueezed_err = torch.unsqueeze(err[n, :], dim=1)
 
-                weird_l2 = torch.norm(unsqueezed_err - torch.matmul(torch.matmul(Vh.transpose(0, 1), Vh), unsqueezed_err), p=2)
+                weird_l2 = torch.norm(unsqueezed_err - torch.matmul(torch.matmul(Vh.transpose(0, 1), Vh), unsqueezed_err), p=2).cpu().numpy()
 
                 weird_l2s.append(weird_l2)
 
