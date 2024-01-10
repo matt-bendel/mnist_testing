@@ -1,5 +1,6 @@
 import nppc
 import torch
+import numpy as np
 
 restoration_net = nppc.RestorationModel(
     dataset='mnist',
@@ -27,10 +28,24 @@ dataloader = torch.utils.data.DataLoader(
     generator=torch.Generator().manual_seed(0),
 )
 
+l2s = []
+weird_l2s = []
 for i, batch in enumerate(dataloader):
     x_org, x_distorted = restoration_net.process_batch(batch)
     x_restored = restoration_net.restore(x_distorted)
     w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=False, use_ddp=False)
-    print(w_mat.shape)
-    exit()
-    # nppc_model
+
+    w_mat = w_mat.flatten(2)
+
+    err = (x_org - x_restored).flatten(1)
+    l2s.append(err.norm(dim=1).mean().cpu().numpy())
+
+    for n in range(x_org.shape[0]):
+        unsqueezed_err = torch.unsqueeze(err[n, :], dim=1)
+        weird_l2 = torch.norm(unsqueezed_err - torch.matmul(torch.matmul(w_mat[n, :, :], w_mat[n, :, :].transpose(0, 1)), unsqueezed_err),
+                              p=2).cpu().numpy()
+
+        weird_l2s.append(weird_l2)
+
+print(f'L2: {np.mean(l2s)}')
+print(f'Weird L2: {np.mean(weird_l2s)}')
