@@ -41,14 +41,14 @@ with torch.no_grad():
 
         plt.figure()
         plt.imshow(x_distorted[0, 0, :, :].cpu().numpy(), cmap='gray')
-        plt.savefig('gt.png')
+        plt.savefig('distorted.png')
         plt.close()
 
         x_restored = restoration_net.restore(x_distorted)
 
         plt.figure()
         plt.imshow(x_restored[0, 0, :, :].cpu().numpy(), cmap='gray')
-        plt.savefig('gt.png')
+        plt.savefig('restored.png')
         plt.close()
         exit()
 
