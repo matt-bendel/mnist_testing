@@ -33,7 +33,7 @@ l2s = []
 weird_l2s = []
 with torch.no_grad():
     for i, batch in enumerate(dataloader):
-        x_org, x_distorted = restoration_net.process_batch(batch)
+        x_org, x_distorted, x_restored = nppc_model.process_batch(batch)
         plt.figure()
         plt.imshow(x_org[0, 0, :, :].cpu().numpy(), cmap='gray')
         plt.savefig('gt.png')
@@ -43,8 +43,6 @@ with torch.no_grad():
         plt.imshow(x_distorted[0, 0, :, :].cpu().numpy(), cmap='gray')
         plt.savefig('distorted.png')
         plt.close()
-
-        x_restored = restoration_net.restore(x_distorted)
 
         plt.figure()
         plt.imshow(x_restored[0, 0, :, :].cpu().numpy(), cmap='gray')
