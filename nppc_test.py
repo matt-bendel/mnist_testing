@@ -43,7 +43,7 @@ with torch.no_grad():
 
         for n in range(x_org.shape[0]):
             unsqueezed_err = torch.unsqueeze(err[n, :], dim=1)
-            weird_l2 = torch.norm(unsqueezed_err - torch.matmul(torch.matmul(w_mat[n, :, :], w_mat[n, :, :].transpose(0, 1)), unsqueezed_err),
+            weird_l2 = torch.norm(unsqueezed_err - torch.matmul(torch.matmul(w_mat[n, :, :].transpose(0, 1), w_mat[n, :, :]), unsqueezed_err),
                                   p=2).cpu().numpy()
 
             weird_l2s.append(weird_l2)
