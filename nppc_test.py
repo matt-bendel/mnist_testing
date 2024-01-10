@@ -29,6 +29,8 @@ dataloader = torch.utils.data.DataLoader(
 
 for i, batch in enumerate(dataloader):
     x_org, x_distorted = restoration_net.process_batch(batch)
-    print(x_org.shape)
-    print(x_distorted.shape)
+    x_restored = restoration_net.restore(x_distorted)
+    w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=False, use_ddp=False)
+    print(w_mat.shape)
+    exit()
     # nppc_model
