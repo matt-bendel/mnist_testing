@@ -1,6 +1,7 @@
 import nppc
 import torch
 import numpy as np
+import matplotlib.pyplot as plt
 
 restoration_net = nppc.RestorationModel(
     dataset='mnist',
@@ -33,7 +34,21 @@ weird_l2s = []
 with torch.no_grad():
     for i, batch in enumerate(dataloader):
         x_org, x_distorted = restoration_net.process_batch(batch)
+        plt.imshow(x_org[0, 0, :, :].cpu().numpy(), cmap='gray')
+        plt.savefig('gt.png')
+        plt.close()
+
+        plt.imshow(x_distorted[0, 0, :, :].cpu().numpy(), cmap='gray')
+        plt.savefig('gt.png')
+        plt.close()
+
         x_restored = restoration_net.restore(x_distorted)
+
+        plt.imshow(x_restored[0, 0, :, :].cpu().numpy(), cmap='gray')
+        plt.savefig('gt.png')
+        plt.close()
+        exit()
+
         w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=False, use_ddp=False)
 
         w_mat = w_mat.flatten(2)
