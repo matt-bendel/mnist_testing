@@ -12,7 +12,7 @@ from pytorch_lightning import seed_everything
 from pytorch_lightning.loggers import WandbLogger
 from models.lightning.rcGAN_mac import rcGAN, rcGANLatent, rcGANJoint
 from data.lightning.MNISTDataModule import MNISTDataModule
-from models.lightning.rcGAN_mac_w_pc_reg import rcGANWReg, rcGANWRegLatent
+from models.lightning.rcGAN_mac_w_pc_reg import rcGANWReg, rcGANWRegLatent, rcGANWRegJoint
 
 def load_object(dct):
     return types.SimpleNamespace(**dct)
@@ -28,7 +28,7 @@ if __name__ == '__main__':
         cfg = yaml.load(f, Loader=yaml.FullLoader)
         cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
-    model = rcGANJoint(cfg, args.exp_name)
+    model = rcGANWRegJoint(cfg, args.exp_name)
 
     dm = MNISTDataModule()
 
