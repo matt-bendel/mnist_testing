@@ -640,7 +640,7 @@ class rcGANWRegJoint(pl.LightningModule):
         self.betastd = 1
         self.betastd_latent = 0.5
         self.beta_pca = 1e-1
-        self.latent_weight = 1e-1
+        self.latent_weight = 1
         self.lam_eps = 0
         self.automatic_optimization = False
         self.val_outputs = []
