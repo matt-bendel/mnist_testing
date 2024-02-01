@@ -238,5 +238,5 @@ class CFIDMetric:
         print(f"M: {m_dist.cpu().numpy()}")
         print(f"C: {c_dist.cpu().numpy()}")
 
-        return cfid, m_dist.cpu().numpy(), c_dist.cpu().numpy()
+        return cfid.cpu().numpy(), m_dist.cpu().numpy(), c_dist.cpu().numpy()
 
