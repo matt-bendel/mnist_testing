@@ -130,6 +130,7 @@ if __name__ == '__main__':
 
     cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv() # 2.66, 10.60, 13.26
     print(cfid_val)
+    exit()
 
     with torch.no_grad():
         for i, data in enumerate(test_loader):
