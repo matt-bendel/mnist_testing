@@ -136,6 +136,17 @@ class CFIDMetric:
 
         return img_e, cond_e, true_e
 
+    def process_inception(self, im_stack, mean, std):
+        new_ims = torch.zeros(size=(im_stack.size(0), 3, 28, 28)).cuda()
+        for i in range(im_stack.size(0)):
+            unnormal = im_stack[i] * std + mean
+            normal = 2 * (unnormal - torch.min(unnormal)) / (torch.max(unnormal) - torch.min(unnormal)) - 1
+            new_ims[i, 0, :, :] = normal
+            new_ims[i, 1, :, :] = normal
+            new_ims[i, 2, :, :] = normal
+
+        return new_ims
+
     def _get_generated_distribution(self):
         image_embed = []
         cond_embed = []
@@ -160,9 +171,9 @@ class CFIDMetric:
                     condition_im = y
                     true_im = x
 
-                    img_e = self.image_embedding(image, features=True)
-                    cond_e = self.condition_embedding(condition_im, features=True)
-                    true_e = self.image_embedding(true_im, features=True)
+                    img_e = self.image_embedding(self.process_inception(image, 0.1307, 0.3801), features=True)
+                    cond_e = self.condition_embedding(self.process_inception(condition_im, 0.1307, 0.3801), features=True)
+                    true_e = self.image_embedding(self.process_inception(true_im, 0.1307, 0.3801), features=True)
 
                     if self.cuda:
                         true_embed.append(true_e)
@@ -187,7 +198,7 @@ class CFIDMetric:
 
     def get_cfid_torch_pinv(self, y_predict=False, y_true=False, x_true=False):
         # if not y_predict:
-        # y_predict, x_true, y_true = self._get_generated_distribution()
+        y_predict, x_true, y_true = self._get_generated_distribution()
 
         y_predict = y_predict.view(y_predict.shape[0], -1)
         x_true = x_true.view(x_true.shape[0], -1)
