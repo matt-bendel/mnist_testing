@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from utils.parse_args import create_arg_parser
 from pytorch_lightning import seed_everything
-from models.lightning.rcGAN_mac import rcGAN, rcGANLatent
-from models.lightning.rcGAN_mac_w_pc_reg import rcGANWReg, rcGANWRegLatent
+from models.lightning.rcGAN_mac import rcGAN, rcGANLatent, rcGANJoint
+from models.lightning.rcGAN_mac_w_pc_reg import rcGANWReg, rcGANWRegLatent, rcGANWRegJoint
 from data.lightning.MNISTDataModule import MNISTDataModule
 from matplotlib import gridspec
 import sklearn.preprocessing
@@ -107,10 +107,10 @@ if __name__ == '__main__':
         cfg = yaml.load(f, Loader=yaml.FullLoader)
         cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
-    model = rcGANLatent.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best.ckpt').cuda()
+    model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best.ckpt').cuda()
     model.eval()
 
-    model_lazy = rcGANWRegLatent.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '_w_reg_k=5/best.ckpt').cuda()
+    model_lazy = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '_w_reg_k=5/best.ckpt').cuda()
     model_lazy.eval()
 
     dm = MNISTDataModule()
