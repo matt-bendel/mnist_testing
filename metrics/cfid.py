@@ -80,6 +80,7 @@ def sample_covariance_torch(a, b):
     N = a.shape[0]
     return torch.matmul(torch.transpose(a, 0, 1), b) / N
 
+import torch.nn.functional as F
 
 class CFIDMetric:
     """Helper function for calculating CFID metric.
@@ -137,10 +138,10 @@ class CFIDMetric:
         return img_e, cond_e, true_e
 
     def process_inception(self, im_stack, mean, std):
-        new_ims = torch.zeros(size=(im_stack.size(0), 3, 28, 28)).cuda()
+        new_ims = torch.zeros(size=(im_stack.size(0), 3, 80, 80)).cuda()
         for i in range(im_stack.size(0)):
             unnormal = im_stack[i] * std + mean
-            normal = 2 * (unnormal - torch.min(unnormal)) / (torch.max(unnormal) - torch.min(unnormal)) - 1
+            normal = F.interpolate(2 * (unnormal - torch.min(unnormal)) / (torch.max(unnormal) - torch.min(unnormal)) - 1, size=(80, 80), mode='bilinear', align_corners=True)
             new_ims[i, 0, :, :] = normal
             new_ims[i, 1, :, :] = normal
             new_ims[i, 2, :, :] = normal
@@ -170,7 +171,6 @@ class CFIDMetric:
                     image = recon
                     condition_im = y
                     true_im = x
-                    print(true_im[0])
 
                     # img_e = self.image_embedding(self.process_inception(image, 0.1307, 0.3801), features=True)
                     # cond_e = self.condition_embedding(self.process_inception(condition_im, 0.1307, 0.3801), features=True)
@@ -180,7 +180,7 @@ class CFIDMetric:
                     cond_e = self.condition_embedding(self.process_inception(condition_im, 0.1307, 0.3801))
                     true_e = self.image_embedding(self.process_inception(true_im, 0.1307, 0.3801))
 
-                    print(true_e[0])
+                    print(true_e.max())
 
                     if self.cuda:
                         true_embed.append(true_e)
