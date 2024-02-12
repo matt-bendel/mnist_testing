@@ -107,10 +107,10 @@ if __name__ == '__main__':
         cfg = yaml.load(f, Loader=yaml.FullLoader)
         cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
-    model = rcGANLatent.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best.ckpt').cuda()
+    model = rcGANWRegJoint.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best.ckpt').cuda()
     model.eval()
 
-    model_lazy = rcGANWRegLatent.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '_w_reg_k=10/best.ckpt').cuda()
+    model_lazy = rcGANWRegJoint.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '_w_reg_k=5/best.ckpt').cuda()
     model_lazy.eval()
 
     dm = MNISTDataModule()
