@@ -170,6 +170,7 @@ class CFIDMetric:
                     image = recon
                     condition_im = y
                     true_im = x
+                    print(true_im[0])
 
                     # img_e = self.image_embedding(self.process_inception(image, 0.1307, 0.3801), features=True)
                     # cond_e = self.condition_embedding(self.process_inception(condition_im, 0.1307, 0.3801), features=True)
@@ -178,6 +179,8 @@ class CFIDMetric:
                     img_e = self.image_embedding(self.process_inception(image, 0.1307, 0.3801))
                     cond_e = self.condition_embedding(self.process_inception(condition_im, 0.1307, 0.3801))
                     true_e = self.image_embedding(self.process_inception(true_im, 0.1307, 0.3801))
+
+                    print(true_e[0])
 
                     if self.cuda:
                         true_embed.append(true_e)
