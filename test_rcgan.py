@@ -48,8 +48,8 @@ class WrapInception(nn.Module):
         x = (x + 1.) / 2.0  # assume the input is normalized to [-1, 1], reset it to [0, 1]
         x = (x - self.mean) / self.std
         # Upsample if necessary
-        if x.shape[2] != 299 or x.shape[3] != 299:
-            x = F.interpolate(x, size=(299, 299), mode='bilinear', align_corners=True)
+        if x.shape[2] != 80 or x.shape[3] != 80:
+            x = F.interpolate(x, size=(80, 80), mode='bilinear', align_corners=True)
         # 299 x 299 x 3
         x = self.net.Conv2d_1a_3x3(x)
         # 149 x 149 x 32
