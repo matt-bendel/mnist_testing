@@ -181,9 +181,7 @@ class CFIDMetric:
                     cond_e = self.condition_embedding(self.process_inception(condition_im, 0.1307, 0.3801))
                     true_e = self.image_embedding(self.process_inception(true_im, 0.1307, 0.3801))
 
-                    print(img_e.min())
                     print(cond_e.min())
-                    print(true_e.min())
 
                     if self.cuda:
                         true_embed.append(true_e)
