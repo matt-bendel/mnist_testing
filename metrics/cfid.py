@@ -166,7 +166,7 @@ class CFIDMetric:
             y = (y - 0.1307) / 0.3081
 
             with torch.no_grad():
-                for l in range(self.num_samps):
+                for l in range(1):
                     recon = self.gan(y)
 
                     image = recon
