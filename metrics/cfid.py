@@ -164,6 +164,7 @@ class CFIDMetric:
             y = x * mask
             x = (x - 0.1307) / 0.3081
             y = (y - 0.1307) / 0.3081
+            mask[:, :, 0:10, :] = 0
 
             with torch.no_grad():
                 for l in range(1):
@@ -178,10 +179,8 @@ class CFIDMetric:
                     # true_e = self.image_embedding(self.process_inception(true_im, 0.1307, 0.3801), features=True)
 
                     img_e = self.image_embedding(self.process_inception(image, 0.1307, 0.3801))
-                    cond_e = self.condition_embedding(self.process_inception(condition_im, 0.1307, 0.3801))
+                    cond_e = self.condition_embedding(self.process_inception(mask * true_im, 0.1307, 0.3801))
                     true_e = self.image_embedding(self.process_inception(true_im, 0.1307, 0.3801))
-
-                    print(cond_e.min())
 
                     if self.cuda:
                         true_embed.append(true_e)
