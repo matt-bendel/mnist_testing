@@ -217,6 +217,9 @@ class CFIDMetric:
         no_m_y_pred = y_predict - m_y_predict
         no_m_x_true = x_true - m_x_true
 
+        print(no_m_x_true.min())
+        print(no_m_x_true.max())
+
         m_dist = torch.einsum('...k,...k->...', m_y_true - m_y_predict, m_y_true - m_y_predict)
 
         u, s, vh = torch.linalg.svd(no_m_x_true.t(), full_matrices=False)
