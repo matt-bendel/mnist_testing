@@ -141,7 +141,8 @@ class CFIDMetric:
         new_ims = torch.zeros(size=(im_stack.size(0), 3, 80, 80)).cuda()
         for i in range(im_stack.size(0)):
             unnormal = im_stack[i] * std + mean
-            normal = F.interpolate(2 * (unnormal - torch.min(unnormal)) / (torch.max(unnormal) - torch.min(unnormal)) - 1, size=(80, 80), mode='bilinear', align_corners=True)
+            normal = 2 * (unnormal - torch.min(unnormal)) / (torch.max(unnormal) - torch.min(unnormal)) - 1
+            normal = F.interpolate(normal.unsqueeze(0), size=(80, 80), mode='bilinear', align_corners=True)
             new_ims[i, 0, :, :] = normal
             new_ims[i, 1, :, :] = normal
             new_ims[i, 2, :, :] = normal
