@@ -28,7 +28,7 @@ if __name__ == '__main__':
         cfg = yaml.load(f, Loader=yaml.FullLoader)
         cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
-    model = rcGANWRegJoint(cfg, args.exp_name)
+    model = rcGAN(cfg, args.exp_name)
 
     dm = MNISTDataModule()
 

@@ -140,7 +140,7 @@ class CFIDMetric:
     def process_inception(self, im_stack, mean, std):
         new_ims = torch.zeros(size=(im_stack.size(0), 3, 80, 80)).cuda()
         for i in range(im_stack.size(0)):
-            unnormal = im_stack[i] * std + mean
+            unnormal = im_stack[i]
             normal = 2 * (unnormal - torch.min(unnormal)) / (torch.max(unnormal) - torch.min(unnormal)) - 1
             normal = F.interpolate(normal.unsqueeze(0), size=(80, 80), mode='bilinear', align_corners=True)
             new_ims[i, 0, :, :] = normal
@@ -159,12 +159,8 @@ class CFIDMetric:
                             total=len(self.loader)):
             x, _ = data
             x = x.cuda()
-            mask = torch.ones(x.size(0), 1, 28, 28).to(x.device)
-            mask[:, :, 0:21, :] = 0
-            y = x * mask
-            x = (x - 0.1307) / 0.3081
-            y = (y - 0.1307) / 0.3081
-            mask[:, :, 0:10, :] = 0
+            y = x + torch.randn_like(x) * 1
+            y = y.clamp(0, 1)
 
             with torch.no_grad():
                 for l in range(1):
@@ -179,7 +175,7 @@ class CFIDMetric:
                     # true_e = self.image_embedding(self.process_inception(true_im, 0.1307, 0.3801), features=True)
 
                     img_e = self.image_embedding(self.process_inception(image, 0.1307, 0.3801))
-                    cond_e = self.condition_embedding(self.process_inception(mask * true_im, 0.1307, 0.3801))
+                    cond_e = self.condition_embedding(self.process_inception(condition_im, 0.1307, 0.3801))
                     true_e = self.image_embedding(self.process_inception(true_im, 0.1307, 0.3801))
 
                     if self.cuda:

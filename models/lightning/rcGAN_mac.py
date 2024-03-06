@@ -34,13 +34,6 @@ class rcGAN(pl.LightningModule):
 
         self.save_hyperparameters()  # Save passed values
 
-    def readd_measures(self, samples, measures):
-        mask = torch.ones(samples.size(0), 1, 28, 28).to(samples.device)
-        mask[:, :, 0:21, :] = 0
-        samples = (1 - mask) * samples + measures
-
-        return samples
-
     def get_noise(self, num_vectors):
         z = torch.randn(num_vectors, self.resolution, self.resolution, 1, device=self.device)
 
@@ -50,7 +43,7 @@ class rcGAN(pl.LightningModule):
         z = self.get_noise(y.size(0))
         input = torch.cat([y, z], dim=1)
         samples = self.generator(input)
-        return self.readd_measures(samples, y)
+        return samples
 
     def compute_gradient_penalty(self, real_samples, fake_samples, y):
         """Calculates the gradient penalty loss for WGAN GP"""
@@ -108,11 +101,8 @@ class rcGAN(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
         x, _ = batch
-        mask = torch.ones(x.size(0), 1, 28, 28).to(x.device)
-        mask[:, :, 0:21, :] = 0
-        y = x * mask
-        x = (x - 0.1307) / 0.3081
-        y = (y - 0.1307) / 0.3081
+        y = x + torch.randn_like(x) * 1
+        y = y.clamp(0, 1)
 
         opt_g, opt_d = self.optimizers()
 
@@ -158,19 +148,13 @@ class rcGAN(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx, external_test=False):
         x, _ = batch
-        mask = torch.ones(x.size(0), 1, 28, 28).to(x.device)
-        mask[:, :, 0:21, :] = 0
-        y = x * mask
-        x = (x - 0.1307) / 0.3081
-        y = (y - 0.1307) / 0.3081
+        y = x + torch.randn_like(x) * 1
+        y = y.clamp(0, 1)
 
         gens = torch.zeros(size=(y.size(0), self.args.num_z_valid, self.args.in_chans, self.args.im_size, self.args.im_size),
                            device=self.device)
         for z in range(self.args.num_z_valid):
-            gens[:, z, :, :, :] = self.forward(y) * 0.3081 + 0.1307
-
-        x = x * 0.3081 + 0.1307
-        y = y * 0.3081 + 0.1307
+            gens[:, z, :, :, :] = self.forward(y)
 
         avg = torch.mean(gens, dim=1)
 
@@ -249,12 +233,6 @@ class rcGANLatent(pl.LightningModule):
 
         self.save_hyperparameters()  # Save passed values
 
-    def readd_measures(self, samples, measures):
-        mask = torch.ones(samples.size(0), 1, 28, 28).to(samples.device)
-        mask[:, :, 0:21, :] = 0
-        samples = (1 - mask) * samples + measures
-
-        return samples
 
     def get_noise(self, num_vectors):
         z = torch.randn(num_vectors, self.resolution, self.resolution, 1, device=self.device)

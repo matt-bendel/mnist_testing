@@ -63,19 +63,15 @@ if __name__ == '__main__':
             print(f'{i}/{len(test_loader)}')
             x, _ = data
             x = x.cuda()
-            mask = torch.ones(x.size(0), 1, 28, 28).to(x.device)
-            mask[:, :, 0:21, :] = 0
-            y = x * mask
-            fig_count = 0
-            x = (x - 0.1307) / 0.3081
-            y = (y - 0.1307) / 0.3081
+            y = x + torch.randn_like(x) * 1
+            y = y.clamp(0, 1)
 
             gens = torch.zeros(size=(y.size(0), 128, 1, 28, 28), device=x.device)
             for z in range(128):
-                gens[:, z, :, :, :] = model.forward(y) * 0.3081 + 0.1307
+                gens[:, z, :, :, :] = model.forward(y)
 
-            x = x * 0.3081 + 0.1307
-            y = y * 0.3081 + 0.1307
+            x = x
+            y = y
 
             avg = torch.mean(gens, dim=1)
 
