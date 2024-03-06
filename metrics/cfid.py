@@ -172,7 +172,7 @@ class CFIDMetric:
 
                     img_e = self.image_embedding((image - 0.1307) / 0.3081, features=True)
                     cond_e = self.condition_embedding((condition_im - 0.1307) / 0.3081, features=True)
-                    true_e = self.image_embedding(self.process_inception((true_im - 0.1307) / 0.3081, 0.1307, 0.3801), features=True)
+                    true_e = self.image_embedding((true_im - 0.1307) / 0.3081, features=True)
                     #
                     # img_e = self.image_embedding(self.process_inception(image, 0.1307, 0.3801))
                     # cond_e = self.condition_embedding(self.process_inception(condition_im, 0.1307, 0.3801))
@@ -200,7 +200,8 @@ class CFIDMetric:
             dtype=torch.float64)
 
     def get_cfid_torch(self, resample=True,y_predict=None, x_true=None, y_true = None):
-        y_predict, x_true, y_true = self._get_generated_distribution()
+        if y_true is None:
+            y_predict, x_true, y_true = self._get_generated_distribution()
 
         # y_predict, x_true, y_true = y_predict_full[i * 72:(i + 1) * 72, :], x_true_full[i * 72:(i + 1) * 72,
         #                                                                     :], y_true_full[i * 72:(i + 1) * 72, :]
