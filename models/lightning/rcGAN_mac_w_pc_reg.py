@@ -53,7 +53,7 @@ class rcGANWReg(pl.LightningModule):
         z = self.get_noise(y.size(0))
         input = torch.cat([y, z], dim=1)
         samples = self.generator(input)
-        return self.readd_measures(samples, y)
+        return samples
 
     def compute_gradient_penalty(self, real_samples, fake_samples, y):
         """Calculates the gradient penalty loss for WGAN GP"""
