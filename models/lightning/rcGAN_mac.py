@@ -107,7 +107,6 @@ class rcGAN(pl.LightningModule):
         opt_g, opt_d = self.optimizers()
 
         x_hat = self.forward(y)
-        x_hat = self.readd_measures(x_hat, y)
 
         fake_pred = self.discriminator(x_hat, y)
         real_pred = self.discriminator(x, y)
