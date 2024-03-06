@@ -200,8 +200,7 @@ class CFIDMetric:
             dtype=torch.float64)
 
     def get_cfid_torch(self, resample=True,y_predict=None, x_true=None, y_true = None):
-        if y_true is None:
-            y_predict, x_true, y_true = self._get_generated_distribution()
+        # y_predict, x_true, y_true = self._get_generated_distribution()
 
         # y_predict, x_true, y_true = y_predict_full[i * 72:(i + 1) * 72, :], x_true_full[i * 72:(i + 1) * 72,
         #                                                                     :], y_true_full[i * 72:(i + 1) * 72, :]
