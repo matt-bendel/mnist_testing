@@ -169,6 +169,10 @@ class rcGAN(pl.LightningModule):
 
                 x_np = x[0, 0, :, :].cpu().numpy()
                 x_hat_np = avg[0, 0, :, :].cpu().numpy()
+                plt.figure()
+                plt.imshow(y[0, 0, :, :].cpu().numpy(), cmap='gray')
+                plt.savefig(f'test_y_rcgan_{batch_idx}.png')
+                plt.close()
 
                 plt.figure()
                 plt.imshow(x_hat_np, cmap='gray')
