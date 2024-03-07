@@ -278,8 +278,8 @@ class rcGANWReg(pl.LightningModule):
         reduce_lr_on_plateau_mean = torch.optim.lr_scheduler.ReduceLROnPlateau(
             opt_g,
             mode='min',
-            factor=0.75,
-            patience=10,
+            factor=0.9,
+            patience=20,
             min_lr=5e-5,
         )
 
