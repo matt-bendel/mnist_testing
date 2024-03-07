@@ -148,7 +148,7 @@ class rcGANWReg(pl.LightningModule):
         g_loss = self.adversarial_loss_generator(y, gens)
         g_loss += self.l1_std_p(avg_recon, gens, x)
 
-        if (self.global_step - 1) % self.args.pca_reg_freq == 0 and self.current_epoch >= 50:
+        if (self.global_step - 1) % self.args.pca_reg_freq == 0 and self.current_epoch >= 15:
             gens = torch.zeros(
                 size=(y.size(0), self.args.num_z_pca, self.args.in_chans, self.args.im_size, self.args.im_size),
                 device=self.device)
@@ -178,7 +178,7 @@ class rcGANWReg(pl.LightningModule):
                 gens_zm_det = gens_zm[n].detach()
                 gens_zm_det[0, :] = x_zm[n, :].view(-1).detach()
 
-                if self.current_epoch >= 75:
+                if self.current_epoch >= 30:
                     inner_product_mat = 1 / self.args.num_z_pca * torch.matmul(Vh, torch.matmul(
                         torch.transpose(gens_zm_det.clone().detach(), 0, 1), torch.matmul(gens_zm_det.clone().detach(), Vh.mT)))
 
@@ -278,8 +278,8 @@ class rcGANWReg(pl.LightningModule):
         reduce_lr_on_plateau_mean = torch.optim.lr_scheduler.ReduceLROnPlateau(
             opt_g,
             mode='min',
-            factor=0.9,
-            patience=20,
+            factor=0.75,
+            patience=5,
             min_lr=5e-5,
         )
 
