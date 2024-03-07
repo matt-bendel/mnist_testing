@@ -210,14 +210,14 @@ class rcGANWReg(pl.LightningModule):
         for z in range(self.args.num_z_valid):
             gens[:, z, :, :, :] = self.forward(y)
 
-        img_e = self.autoencoder(gens[:, 0, :, :, :], features=True)
-        cond_e = self.autoencoder(y, features=True)
-        true_e = self.autoencoder(x, features=True)
+        img_e = self.autoencoder((gens[:, 0, :, :, :] - 0.1307) / 0.3081, features=True)
+        cond_e = self.autoencoder((y - 0.1307) / 0.3081, features=True)
+        true_e = self.autoencoder((x - 0.1307) / 0.3081, features=True)
 
         avg = torch.mean(gens, dim=1)
 
-        psnr_8 = peak_signal_noise_ratio(avg * 0.3081 + 0.1307, x)
-        psnr_1 = peak_signal_noise_ratio(gens[:, 0, :, :, :] * 0.3081 + 0.1307, x)
+        psnr_8 = peak_signal_noise_ratio(avg, x)
+        psnr_1 = peak_signal_noise_ratio(gens[:, 0, :, :, :], x)
 
         self.val_outputs.append({'psnr_8': psnr_8, 'psnr_1': psnr_1, 'img_e': img_e, 'cond_e': cond_e, 'true_e': true_e})
 

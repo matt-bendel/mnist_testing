@@ -136,20 +136,16 @@ if __name__ == '__main__':
         for i, data in enumerate(test_loader):
             x, _ = data
             x = x.cuda()
-            mask = torch.ones(x.size(0), 1, 28, 28).to(x.device)
-            mask[:, :, 0:21, :] = 0
-            y = x * mask
-            print(y.device)
+            y = x + torch.randn_like(x) * 1
+            y = y.clamp(0, 1)
             fig_count = 0
-            x = (x - 0.1307) / 0.3081
-            y = (y - 0.1307) / 0.3081
 
             gens = torch.zeros(size=(y.size(0), 784, 1, 28, 28), device=x.device)
             for z in range(784):
-                gens[:, z, :, :, :] = model.forward(y) * 0.3081 + 0.1307
+                gens[:, z, :, :, :] = model.forward(y)
 
-            x = x * 0.3081 + 0.1307
-            y = y * 0.3081 + 0.1307
+            x = x
+            y = y
 
             avg = torch.mean(gens, dim=1)
 
@@ -200,7 +196,7 @@ if __name__ == '__main__':
                 ax.set_yticks([])
                 ax.set_ylabel('error')
 
-                plt.savefig(f'test_ims_rcgan_lazy/x_y_x_hat_error_{i}.png')
+                plt.savefig(f'test_ims_rcgan/x_y_x_hat_error_{i}.png')
 
                 plt.close(fig)
 
@@ -230,7 +226,7 @@ if __name__ == '__main__':
 
                 plt.figure()
                 plt.scatter(range(5), s)
-                plt.savefig(f'test_ims_rcgan_lazy/{args.exp_name}_pca_plot_sv_{i}.png')
+                plt.savefig(f'test_ims_rcgan/{args.exp_name}_pca_plot_sv_{i}.png')
                 plt.close()
 
                 for k in range(5):
@@ -291,7 +287,7 @@ if __name__ == '__main__':
                     if k == 0:
                         ax.set_title('x_hat + 3 sigma_i w_i')
 
-                plt.savefig(f'test_ims_rcgan_lazy/{args.exp_name}_pca_plot_{i}.png')
+                plt.savefig(f'test_ims_rcgan/{args.exp_name}_pca_plot_{i}.png')
 
                 plt.close(fig)
             else:
