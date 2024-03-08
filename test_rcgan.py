@@ -107,7 +107,7 @@ if __name__ == '__main__':
         cfg = yaml.load(f, Loader=yaml.FullLoader)
         cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
-    model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + 'rcgan/best.ckpt').cuda()
+    model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + 'rcgan_denoising/best.ckpt').cuda()
     model.eval()
 
     model_lazy = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + 'eigengan_denoising_k=10/best.ckpt').cuda()
@@ -123,13 +123,20 @@ if __name__ == '__main__':
     embedding = InceptionEmbedding()
     cfid = CFIDMetric(model, dm.val_dataloader(), embedding, embedding, True)
 
-    cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv() # 1.57, 12.89, 14.45
-    print(cfid_val)
+    cfid_val_r, m_val_r, c_val_r = cfid.get_cfid_torch_pinv() # 1.57, 12.89, 14.45
 
     cfid = CFIDMetric(model_lazy, dm.val_dataloader(), embedding, embedding, True)
 
     cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv() # 2.66, 10.60, 13.26
-    print(cfid_val)
+
+    print('rcGAN:')
+    print(f'CFID: {cfid_val_r}')
+    print(f'M: {m_val_r}')
+    print(f'C: {c_val_r}')
+    print('EigenGAN:')
+    print(f'CFID: {cfid_val}')
+    print(f'M: {m_val}')
+    print(f'C: {c_val}')
     exit()
 
     with torch.no_grad():
