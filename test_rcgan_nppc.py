@@ -31,10 +31,10 @@ if __name__ == '__main__':
         cfg = yaml.load(f, Loader=yaml.FullLoader)
         cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
-    model = rcGANJoint.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '/best.ckpt').cuda()
+    model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + 'rcgan_denoising/best.ckpt').cuda()
     model.eval()
 
-    model_lazy = rcGANWRegJoint.load_from_checkpoint(cfg.checkpoint_dir + args.exp_name + '_w_reg_k=10/best.ckpt').cuda()
+    model_lazy = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + 'eigengan_denoising_k=10/best.ckpt').cuda()
     model_lazy.eval()
     model = model_lazy
 
@@ -42,13 +42,6 @@ if __name__ == '__main__':
     dm.setup()
     test_loader = dm.test_dataloader()
 
-    embedding = MNISTAutoencoder.load_from_checkpoint('/storage/matt_models/mnist/autoencoder/best.ckpt').autoencoder.cuda()
-    embedding.eval()
-
-    cfid = CFIDMetric(model, dm.val_dataloader(), embedding, embedding, True)
-
-    cfid_val, m_val, c_val = cfid.get_cfid_torch_pinv() # 1.57, 12.89, 14.45
-    print(cfid_val)
     #
     # cfid = CFIDMetric(model_lazy, dm.val_dataloader(), embedding, embedding, True)
     #
