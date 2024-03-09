@@ -170,13 +170,13 @@ class CFIDMetric:
                     condition_im = y
                     true_im = x
 
-                    # img_e = self.image_embedding((image - 0.1307) / 0.3081, features=True)
-                    # cond_e = self.condition_embedding((condition_im - 0.1307) / 0.3081, features=True)
-                    # true_e = self.image_embedding((true_im - 0.1307) / 0.3081, features=True)
-
-                    img_e = self.image_embedding(self.process_inception(image, 0.1307, 0.3801))
-                    cond_e = self.condition_embedding(self.process_inception(condition_im, 0.1307, 0.3801))
-                    true_e = self.image_embedding(self.process_inception(true_im, 0.1307, 0.3801))
+                    img_e = self.image_embedding((image - 0.1307) / 0.3081, features=True)
+                    cond_e = self.condition_embedding((condition_im - 0.1307) / 0.3081, features=True)
+                    true_e = self.image_embedding((true_im - 0.1307) / 0.3081, features=True)
+                    #
+                    # img_e = self.image_embedding(self.process_inception(image, 0.1307, 0.3801))
+                    # cond_e = self.condition_embedding(self.process_inception(condition_im, 0.1307, 0.3801))
+                    # true_e = self.image_embedding(self.process_inception(true_im, 0.1307, 0.3801))
 
                     if self.cuda:
                         true_embed.append(true_e)
@@ -243,7 +243,7 @@ class CFIDMetric:
 
     def get_cfid_torch_pinv(self, y_predict=False, y_true=False, x_true=False):
         # if not y_predict:
-        y_predict, x_true, y_true = self._get_generated_distribution()
+        # y_predict, x_true, y_true = self._get_generated_distribution()
 
         y_predict = y_predict.view(y_predict.shape[0], -1)
         x_true = x_true.view(x_true.shape[0], -1)
