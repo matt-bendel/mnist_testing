@@ -134,7 +134,7 @@ if __name__ == '__main__':
 
             avg = torch.mean(gens, dim=1)
 
-            if i <= 0:
+            if i <= 5:
                 x_np = x[0, 0, :, :].cpu().numpy()
                 x_hat_np = avg[0, 0, :, :].cpu().numpy()
                 y_np = y[0, 0, :, :].cpu().numpy()
@@ -150,16 +150,6 @@ if __name__ == '__main__':
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
                 ax = plt.subplot(gs[0, 0])
-                ax.imshow(x_np, cmap='gray', vmin=0, vmax=1)
-                ax.set_xticklabels([])
-                ax.set_yticklabels([])
-                ax.set_xticks([])
-                ax.set_yticks([])
-                ax.set_ylabel('x')
-                for spine in ax.spines.values():
-                    spine.set_edgecolor('green')
-
-                ax = plt.subplot(gs[1, 0])
                 ax.imshow(y_np, cmap='gray', vmin=0, vmax=1)
                 ax.set_xticklabels([])
                 ax.set_yticklabels([])
@@ -167,7 +157,7 @@ if __name__ == '__main__':
                 ax.set_yticks([])
                 ax.set_ylabel('y')
 
-                ax = plt.subplot(gs[2, 0])
+                ax = plt.subplot(gs[1, 0])
                 ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
                 ax.set_xticklabels([])
                 ax.set_yticklabels([])
@@ -175,20 +165,23 @@ if __name__ == '__main__':
                 ax.set_yticks([])
                 ax.set_ylabel('x_hat')
 
-                ax = plt.subplot(gs[3, 0])
-                ax.imshow(x_np - x_hat_np, cmap='bwr')
+                ax = plt.subplot(gs[2, 0])
+                ax.imshow(x_np, cmap='gray', vmin=0, vmax=1)
                 ax.set_xticklabels([])
                 ax.set_yticklabels([])
                 ax.set_xticks([])
                 ax.set_yticks([])
-                ax.set_ylabel('error')
+                ax.set_ylabel('x')
+                ax.patch.set_edgecolor('black')
 
-                plt.savefig(f'test_ims_rcgan/x_y_x_hat_error_{i}.png')
+                ax.patch.set_linewidth(1)
+
+                plt.savefig(f'test_ims_rcgan/mnist_left_eigengan_{i}.png')
 
                 plt.close(fig)
 
-                nrow = 5
-                ncol = 6
+                nrow = 3
+                ncol = 5
 
                 fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
@@ -210,71 +203,57 @@ if __name__ == '__main__':
                 u, s, vh = np.linalg.svd(cov_mat, full_matrices=False)
                 s = s.reshape((1, -1))[:, 0:5]
                 print(s.shape)
-
-                plt.figure()
-                plt.scatter(range(5), s)
-                plt.savefig(f'test_ims_rcgan/{args.exp_name}_pca_plot_sv_{i}.png')
-                plt.close()
+                cur_row = 1
 
                 for k in range(5):
                     pc_np = vh[k].reshape((28, 28))
 
-                    ax = plt.subplot(gs[k, 0])
+                    ax = plt.subplot(gs[0, k])
                     ax.imshow(pc_np, cmap='bwr')
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
                     ax.set_xticks([])
                     ax.set_yticks([])
-                    ax.set_ylabel(f'i={k+1}')
-                    if k == 0:
-                        ax.set_title('w_i')
 
-                    ax = plt.subplot(gs[k, 1])
-                    ax.imshow(x_hat_np - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
-                    ax.set_xticklabels([])
-                    ax.set_yticklabels([])
-                    ax.set_xticks([])
-                    ax.set_yticks([])
-                    if k == 0:
-                        ax.set_title('x_hat - 3 sigma_i w_i')
+                    if k == 1 or k == 4:
+                        ax = plt.subplot(gs[cur_row, 1])
+                        ax.imshow(x_hat_np - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
+                        ax.set_xticklabels([])
+                        ax.set_yticklabels([])
+                        ax.set_xticks([])
+                        ax.set_yticks([])
 
-                    ax = plt.subplot(gs[k, 2])
-                    ax.imshow(x_hat_np - 2 * pc_np, cmap='gray', vmin=0, vmax=1)
-                    ax.set_xticklabels([])
-                    ax.set_yticklabels([])
-                    ax.set_xticks([])
-                    ax.set_yticks([])
-                    if k == 0:
-                        ax.set_title('x_hat - 2 sigma_i w_i')
+                        ax = plt.subplot(gs[cur_row, 2])
+                        ax.imshow(x_hat_np - 2 * pc_np, cmap='gray', vmin=0, vmax=1)
+                        ax.set_xticklabels([])
+                        ax.set_yticklabels([])
+                        ax.set_xticks([])
+                        ax.set_yticks([])
 
-                    ax = plt.subplot(gs[k, 3])
-                    ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
-                    ax.set_xticklabels([])
-                    ax.set_yticklabels([])
-                    ax.set_xticks([])
-                    ax.set_yticks([])
-                    if k == 0:
-                        ax.set_title('x_hat')
+                        ax = plt.subplot(gs[cur_row, 3])
+                        ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
+                        ax.set_xticklabels([])
+                        ax.set_yticklabels([])
+                        ax.set_xticks([])
+                        ax.set_yticks([])
 
-                    ax = plt.subplot(gs[k, 4])
-                    ax.imshow(x_hat_np + 2 * pc_np, cmap='gray', vmin=0, vmax=1)
-                    ax.set_xticklabels([])
-                    ax.set_yticklabels([])
-                    ax.set_xticks([])
-                    ax.set_yticks([])
-                    if k == 0:
-                        ax.set_title('x_hat + 2 sigma_i w_i')
+                        ax = plt.subplot(gs[cur_row, 4])
+                        ax.imshow(x_hat_np + 2 * pc_np, cmap='gray', vmin=0, vmax=1)
+                        ax.set_xticklabels([])
+                        ax.set_yticklabels([])
+                        ax.set_xticks([])
+                        ax.set_yticks([])
 
-                    ax = plt.subplot(gs[k, 5])
-                    ax.imshow(x_hat_np + 3 * pc_np, cmap='gray', vmin=0, vmax=1)
-                    ax.set_xticklabels([])
-                    ax.set_yticklabels([])
-                    ax.set_xticks([])
-                    ax.set_yticks([])
-                    if k == 0:
-                        ax.set_title('x_hat + 3 sigma_i w_i')
+                        ax = plt.subplot(gs[cur_row, 5])
+                        ax.imshow(x_hat_np + 3 * pc_np, cmap='gray', vmin=0, vmax=1)
+                        ax.set_xticklabels([])
+                        ax.set_yticklabels([])
+                        ax.set_xticks([])
+                        ax.set_yticks([])
 
-                plt.savefig(f'test_ims_rcgan/{args.exp_name}_pca_plot_{i}.png')
+                        cur_row += 1
+
+                plt.savefig(f'test_ims_rcgan/mnist_right_eigengan_{i}.png')
 
                 plt.close(fig)
             else:
