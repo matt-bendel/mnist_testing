@@ -134,7 +134,7 @@ if __name__ == '__main__':
 
             avg = torch.mean(gens, dim=1)
 
-            if i <= 20:
+            if i <= 40:
                 x_np = x[0, 0, :, :].cpu().numpy()
                 x_hat_np = avg[0, 0, :, :].cpu().numpy()
                 y_np = y[0, 0, :, :].cpu().numpy()
