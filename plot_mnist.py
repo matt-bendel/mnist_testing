@@ -134,7 +134,7 @@ if __name__ == '__main__':
 
             avg = torch.mean(gens, dim=1)
 
-            if i <= 10:
+            if i <= 20:
                 x_np = x[0, 0, :, :].cpu().numpy()
                 x_hat_np = avg[0, 0, :, :].cpu().numpy()
                 y_np = y[0, 0, :, :].cpu().numpy()
@@ -217,14 +217,14 @@ if __name__ == '__main__':
 
                     if k == 1 or k == 4:
                         ax = plt.subplot(gs[cur_row, 0])
-                        ax.imshow(x_hat_np - 3 * s[0, k] * pc_np, cmap='gray', vmin=0, vmax=1)
+                        ax.imshow(x_hat_np - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
                         ax.set_xticklabels([])
                         ax.set_yticklabels([])
                         ax.set_xticks([])
                         ax.set_yticks([])
 
                         ax = plt.subplot(gs[cur_row, 1])
-                        ax.imshow(x_hat_np - 2 * s[0, k] * pc_np, cmap='gray', vmin=0, vmax=1)
+                        ax.imshow(x_hat_np - 2 * pc_np, cmap='gray', vmin=0, vmax=1)
                         ax.set_xticklabels([])
                         ax.set_yticklabels([])
                         ax.set_xticks([])
@@ -238,14 +238,14 @@ if __name__ == '__main__':
                         ax.set_yticks([])
 
                         ax = plt.subplot(gs[cur_row, 3])
-                        ax.imshow(x_hat_np + 2 * s[0, k] * pc_np, cmap='gray', vmin=0, vmax=1)
+                        ax.imshow(x_hat_np + 2 * pc_np, cmap='gray', vmin=0, vmax=1)
                         ax.set_xticklabels([])
                         ax.set_yticklabels([])
                         ax.set_xticks([])
                         ax.set_yticks([])
 
                         ax = plt.subplot(gs[cur_row, 4])
-                        ax.imshow(x_hat_np + 3 * s[0, k] * pc_np, cmap='gray', vmin=0, vmax=1)
+                        ax.imshow(x_hat_np + 3 * pc_np, cmap='gray', vmin=0, vmax=1)
                         ax.set_xticklabels([])
                         ax.set_yticklabels([])
                         ax.set_xticks([])
