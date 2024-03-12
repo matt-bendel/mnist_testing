@@ -36,7 +36,7 @@ if __name__ == '__main__':
 
     model_lazy = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + 'eigengan_denoising_k=5/best.ckpt').cuda()
     model_lazy.eval()
-    # model = model_lazy
+    model = model_lazy
 
     dm = MNISTDataModule()
     dm.setup()
