@@ -78,6 +78,7 @@ if __name__ == '__main__':
 
             for n in range(x.shape[0]):
                 _, S, Vh = torch.linalg.svd(gens_zm[n], full_matrices=False)
+                print(Vh.shape)
 
                 unsqueezed_err = torch.unsqueeze(err[n, :], dim=1)
 
