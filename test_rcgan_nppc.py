@@ -34,7 +34,7 @@ if __name__ == '__main__':
     model = rcGAN.load_from_checkpoint(cfg.checkpoint_dir + 'rcgan_denoising/best.ckpt').cuda()
     model.eval()
 
-    model_lazy = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + 'eigengan_denoising_k=5/best.ckpt').cuda()
+    model_lazy = rcGANWReg.load_from_checkpoint(cfg.checkpoint_dir + 'eigengan_denoising_k=10/best.ckpt').cuda()
     model_lazy.eval()
     model = model_lazy
 
