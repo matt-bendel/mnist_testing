@@ -128,8 +128,8 @@ if __name__ == '__main__':
             y = y.clamp(0, 1)
             fig_count = 0
 
-            gens = torch.zeros(size=(y.size(0), 100, 1, 28, 28), device=x.device)
-            for z in range(100):
+            gens = torch.zeros(size=(y.size(0), 784, 1, 28, 28), device=x.device)
+            for z in range(784):
                 gens[:, z, :, :, :] = model.forward(y)
 
             avg = torch.mean(gens, dim=1)
