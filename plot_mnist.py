@@ -128,12 +128,9 @@ if __name__ == '__main__':
             y = y.clamp(0, 1)
             fig_count = 0
 
-            gens = torch.zeros(size=(y.size(0), 784, 1, 28, 28), device=x.device)
-            for z in range(784):
+            gens = torch.zeros(size=(y.size(0), 100, 1, 28, 28), device=x.device)
+            for z in range(100):
                 gens[:, z, :, :, :] = model.forward(y)
-
-            x = x
-            y = y
 
             avg = torch.mean(gens, dim=1)
 
@@ -159,6 +156,8 @@ if __name__ == '__main__':
                 ax.set_xticks([])
                 ax.set_yticks([])
                 ax.set_ylabel('x')
+                for spine in ax.spines.values():
+                    spine.set_edgecolor('green')
 
                 ax = plt.subplot(gs[1, 0])
                 ax.imshow(y_np, cmap='gray', vmin=0, vmax=1)
