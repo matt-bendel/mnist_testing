@@ -245,7 +245,7 @@ if __name__ == '__main__':
                     pc_np = vh[k]
 
                     ax = plt.subplot(gs[0, k])
-                    ax.imshow(pc_np, cmap='bwr', vmin=np.min(vh[k]), vmax=np.max(vh[k]), norm=MidpointNormalize(np.min(vh[k]), np.max(vh[k]), vh[k, 0, 0]))
+                    ax.imshow(pc_np, cmap='bwr', norm=MidpointNormalize(np.min(vh[k]), np.max(vh[k]), vh[k, 0, 0]))
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
                     ax.set_xticks([])
