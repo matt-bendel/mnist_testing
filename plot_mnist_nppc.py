@@ -30,6 +30,11 @@ dataloader = torch.utils.data.DataLoader(
     generator=torch.Generator().manual_seed(0),
 )
 
+
+def scale_img(x):
+    return x / torch.abs(x).flatten(-3).max(-1)[0][..., None, None, None] / 1.5 + 0.5
+
+
 fig_count = 0
 with torch.no_grad():
     for i, batch in enumerate(dataloader):
@@ -50,7 +55,7 @@ with torch.no_grad():
         # plt.close()
         # exit()
 
-        w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=False, use_ddp=False)
+        w_mat = scale_img(nppc_model.get_dirs(x_distorted, x_restored, use_best=False, use_ddp=False))
 
         for i in range(x_org.shape[0]):
             nrow = 2
@@ -76,10 +81,10 @@ with torch.no_grad():
             ax.set_xticks([])
             ax.set_yticks([])
 
-            plt.savefig(f'/home/bendel.8/Git_Repos/mnist_testing/test_ims_rcgan/mnist_left_bottom_nppc_{fig_count}.png', bbox_inches='tight', dpi=300)
+            plt.savefig(f'/home/bendel.8/Git_Repos/mnist_testing/test_ims_rcgan/mnist_left_bottom_nppc_{fig_count}.png',
+                        bbox_inches='tight', dpi=300)
 
             plt.close(fig)
-
 
             nrow = 1
             ncol = 5
@@ -90,7 +95,6 @@ with torch.no_grad():
                                    wspace=0.05, hspace=0.05,
                                    top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                    left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
-
 
             for k in range(5):
                 pc_np = w_mat[i, k, 0].cpu().numpy()
@@ -109,7 +113,8 @@ with torch.no_grad():
                     ax.patch.set_edgecolor('blue')
                     ax.patch.set_linewidth(3)
 
-            plt.savefig(f'/home/bendel.8/Git_Repos/mnist_testing/test_ims_rcgan/mnist_right_top_nppc_{i}.png', bbox_inches='tight', dpi=300)
+            plt.savefig(f'/home/bendel.8/Git_Repos/mnist_testing/test_ims_rcgan/mnist_right_top_nppc_{i}.png',
+                        bbox_inches='tight', dpi=300)
 
             plt.close(fig)
 
@@ -196,14 +201,12 @@ with torch.no_grad():
 
                     cur_row += 1
 
-            plt.savefig(f'/home/bendel.8/Git_Repos/mnist_testing/test_ims_rcgan/mnist_right_bottom_nppc_{i}.png', bbox_inches='tight', dpi=300)
+            plt.savefig(f'/home/bendel.8/Git_Repos/mnist_testing/test_ims_rcgan/mnist_right_bottom_nppc_{i}.png',
+                        bbox_inches='tight', dpi=300)
 
             plt.close(fig)
-
-
 
             fig_count += 1
 
             if (fig_count >= 1):
                 exit()
-
