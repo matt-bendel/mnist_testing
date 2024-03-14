@@ -220,10 +220,10 @@ if __name__ == '__main__':
                     if k == 1 or k == 4:
                         if k == 1:
                             ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(5)
+                            ax.patch.set_linewidth(4)
                         else:
                             ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(5)
+                            ax.patch.set_linewidth(4)
 
                         ax = plt.subplot(gs[cur_row, 0])
                         ax.imshow(x_hat_np - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
@@ -233,10 +233,10 @@ if __name__ == '__main__':
                         ax.set_yticks([])
                         if k == 1:
                             ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(5)
+                            ax.patch.set_linewidth(4)
                         else:
                             ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(5)
+                            ax.patch.set_linewidth(4)
 
                         ax = plt.subplot(gs[cur_row, 1])
                         ax.imshow(x_hat_np - 2 * pc_np, cmap='gray', vmin=0, vmax=1)
@@ -246,10 +246,10 @@ if __name__ == '__main__':
                         ax.set_yticks([])
                         if k == 1:
                             ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(5)
+                            ax.patch.set_linewidth(4)
                         else:
                             ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(5)
+                            ax.patch.set_linewidth(4)
 
                         ax = plt.subplot(gs[cur_row, 2])
                         ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
@@ -259,10 +259,10 @@ if __name__ == '__main__':
                         ax.set_yticks([])
                         if k == 1:
                             ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(5)
+                            ax.patch.set_linewidth(4)
                         else:
                             ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(5)
+                            ax.patch.set_linewidth(4)
 
                         ax = plt.subplot(gs[cur_row, 3])
                         ax.imshow(x_hat_np + 2 * pc_np, cmap='gray', vmin=0, vmax=1)
@@ -272,10 +272,10 @@ if __name__ == '__main__':
                         ax.set_yticks([])
                         if k == 1:
                             ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(5)
+                            ax.patch.set_linewidth(4)
                         else:
                             ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(5)
+                            ax.patch.set_linewidth(4)
 
                         ax = plt.subplot(gs[cur_row, 4])
                         ax.imshow(x_hat_np + 3 * pc_np, cmap='gray', vmin=0, vmax=1)
@@ -285,10 +285,10 @@ if __name__ == '__main__':
                         ax.set_yticks([])
                         if k == 1:
                             ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(5)
+                            ax.patch.set_linewidth(4)
                         else:
                             ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(5)
+                            ax.patch.set_linewidth(4)
 
                         cur_row += 1
 
