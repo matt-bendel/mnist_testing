@@ -237,7 +237,7 @@ if __name__ == '__main__':
                         x0, y0, width, height = bbox.transformed(fig.transFigure.inverted()).bounds
                         # slightly increase the very tight bounds:
                         fig.add_artist(
-                            plt.Rectangle((x0 - 0.02 * width, y0), width, height, edgecolor='red',
+                            plt.Rectangle((x0 + 0.02 * width, y0), width, height, edgecolor='red',
                                           linewidth=3, fill=False))
 
                         ax = plt.subplot(gs[cur_row, 1])
