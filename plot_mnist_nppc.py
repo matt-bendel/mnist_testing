@@ -13,7 +13,7 @@ restoration_net = nppc.RestorationModel(
     lr=1e-4,
     device='cuda:0',
 )
-restoration_net.load('./results/mnist_denoising/restoration/checkpoint.pt')
+restoration_net = restoration_net.load('./results/mnist_denoising/restoration/checkpoint.pt')
 restoration_net.net.eval()
 
 nppc_model = nppc.NPPCModel(
@@ -23,7 +23,7 @@ nppc_model = nppc.NPPCModel(
     lr=1e-4,
     device='cuda:0',
 )
-nppc_model.load('./results/mnist_denoising/nppc/checkpoint.pt')
+nppc_model = nppc_model.load('./results/mnist_denoising/nppc/checkpoint.pt')
 nppc_model.net.eval()
 
 dataloader = torch.utils.data.DataLoader(
