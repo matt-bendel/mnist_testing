@@ -3,6 +3,7 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
+import torchvision
 
 restoration_net = nppc.RestorationModel(
     dataset='mnist',
@@ -33,26 +34,43 @@ dataloader = torch.utils.data.DataLoader(
 )
 
 
+def sample_to_width(x, width=1580, padding_size=2):
+    n_samples = min((width - padding_size) // (x.shape[-1] + padding_size), x.shape[0])
+    indices = np.linspace(0, x.shape[0] - 1, n_samples).astype(int)
+    return x[indices]
+
+def imgs_to_grid(imgs, nrows=None, **make_grid_args):
+    imgs = imgs.detach().cpu()
+    if imgs.ndim == 5:
+        nrow = imgs.shape[1]
+        imgs = imgs.reshape(imgs.shape[0] * imgs.shape[1], imgs.shape[2], imgs.shape[3], imgs.shape[4])
+    elif nrows is None:
+        nrow = int(np.ceil(imgs.shape[0] ** 0.5))
+
+    make_grid_args2 = dict(value_range=(0, 1), pad_value=1.)
+    make_grid_args2.update(make_grid_args)
+    img = torchvision.utils.make_grid(imgs, nrow=nrow, **make_grid_args2).clamp(0, 1)
+    return img
+
 def scale_img(x):
     return x / torch.abs(x).flatten(-3).max(-1)[0][..., None, None, None] / 1.5 + 0.5
 
-def gram_schmidt(x):
-    x_shape = x.shape
-    x = x.flatten(2)
+def tensor_img_to_numpy(x):
+    return x.detach().permute(-2, -1, -3).cpu().numpy()
 
-    x_orth = []
-    proj_vec_list = []
-    for i in range(x.shape[1]):
-        w = x[:, i, :]
-        for w2 in proj_vec_list:
-            w = w - w2 * torch.sum(w * w2, dim=-1, keepdim=True)
-        w_hat = w.detach() / w.detach().norm(dim=-1, keepdim=True)
+def imshow(img, scale=1, **kwargs):
+    if isinstance(img, torch.Tensor):
+        img = tensor_img_to_numpy(img)
+    img = img.clip(0, 1)
 
-        x_orth.append(w)
-        proj_vec_list.append(w_hat)
-
-    x_orth = torch.stack(x_orth, dim=1).view(*x_shape)
-    return x_orth
+    fig = px.imshow(img, **kwargs).update_layout(
+        height=img.shape[0] * scale,
+        width=img.shape[1] * scale,
+        margin=dict(t=0, b=0, l=0, r=0),
+        xaxis_showticklabels=False,
+        yaxis_showticklabels=False,
+    )
+    return fig
 
 fig_count = 0
 with torch.no_grad():
@@ -75,6 +93,11 @@ with torch.no_grad():
         # exit()
 
         w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=True, use_ddp=False)
+        imgs = torch.cat((scale_img(w_mat)), dim=0)
+        imgs = imgs.transpose(0, 1).contiguous()
+        plt.imshow(imgs_to_grid(imgs).cpu().numpy())
+        plt.savefig('test.png')
+        exit()
         print(torch.norm(torch.flatten(w_mat[0, 0, 0])))
         print(torch.norm(torch.flatten(w_mat[0, 1, 0] * w_mat[0, 0, 0])))
 
