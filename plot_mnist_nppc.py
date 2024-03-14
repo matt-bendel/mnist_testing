@@ -7,21 +7,21 @@ from matplotlib import gridspec
 restoration_net = nppc.RestorationModel(
     dataset='mnist',
     data_folder='/storage/matt_models/mnist/',
-    distortion_type='inpainting_1',
+    distortion_type='denoising_1',
     net_type='unet',
     lr=1e-4,
     device='cuda:0',
 )
-restoration_net.load('./results/mnist_inpainting/restoration/checkpoint.pt')
+restoration_net.load('./results/mnist_denoising/restoration/checkpoint.pt')
 
 nppc_model = nppc.NPPCModel(
-    restoration_model_folder='./results/mnist_inpainting/restoration/',
+    restoration_model_folder='./results/mnist_denoising/restoration/',
     net_type='unet',
     n_dirs=5,
     lr=1e-4,
     device='cuda:0',
 )
-nppc_model.load('./results/mnist_inpainting/nppc/checkpoint.pt')
+nppc_model.load('./results/mnist_denoising/nppc/checkpoint.pt')
 
 dataloader = torch.utils.data.DataLoader(
     nppc_model.data_module.test_set,
