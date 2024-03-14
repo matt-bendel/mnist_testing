@@ -56,6 +56,8 @@ with torch.no_grad():
         # exit()
 
         w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=False, use_ddp=False)
+        print(torch.norm(w_mat[0, 0, 0]))
+        print(torch.norm(w_mat[0,1,0] * w_mat[0,0,0]))
 
         for i in range(x_org.shape[0]):
             nrow = 2
