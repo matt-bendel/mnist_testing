@@ -3,6 +3,7 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
+import matplotlib as mpl
 import torchvision
 
 restoration_net = nppc.RestorationModel(
