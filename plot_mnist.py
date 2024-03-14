@@ -102,6 +102,8 @@ def load_object(dct):
 # TODO: PCANET in here
 # TODO: Separate Eigenvectors
 # TODO: Colored squares...
+def scale_img(x):
+    return x / torch.abs(x).flatten(-3).max(-1)[0][..., None, None, None] / 1.5 + 0.5
 
 if __name__ == '__main__':
     torch.set_float32_matmul_precision('medium')
@@ -223,7 +225,7 @@ if __name__ == '__main__':
                 cur_row = 1
 
                 for k in range(5):
-                    pc_np = vh[k].reshape((28, 28))
+                    pc_np = scale_img(vh)[k].reshape((28, 28))
 
                     ax = plt.subplot(gs[0, k])
                     ax.imshow(pc_np, cmap='bwr')
