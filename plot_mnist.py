@@ -183,7 +183,7 @@ if __name__ == '__main__':
                     ax.set_xticks([])
                     ax.set_yticks([])
 
-                    plt.savefig(f'test_ims_rcgan/mnist_left_top_eigengan_{i}.png', bbox_inches='tight', dpi=300)
+                    plt.savefig(f'test_ims_rcgan/mnist_left_top_eigengan_{j}.png', bbox_inches='tight', dpi=300)
 
                     plt.close(fig)
 
@@ -210,7 +210,7 @@ if __name__ == '__main__':
                     ax.set_xticks([])
                     ax.set_yticks([])
 
-                    plt.savefig(f'test_ims_rcgan/mnist_left_bottom_eigengan_{i}.png', bbox_inches='tight', dpi=300)
+                    plt.savefig(f'test_ims_rcgan/mnist_left_bottom_eigengan_{j}.png', bbox_inches='tight', dpi=300)
 
                     plt.close(fig)
 
@@ -240,12 +240,12 @@ if __name__ == '__main__':
                     cur_row = 1
 
                     vh = vh[0:5]
-                    vh = vh.reshape((5, 28, 28))
-                    vh = scale_img(torch.from_numpy(vh).unsqueeze(0).unsqueeze(2)).numpy()
-                    vh = vh[0, :, 0, :, :]
 
                     for k in range(5):
-                        pc_np = vh[k]
+                        new_vh = vh.reshape((5, 28, 28))
+                        new_vh = scale_img(torch.from_numpy(new_vh).unsqueeze(0).unsqueeze(2)).numpy()
+                        new_vh = new_vh[0, :, 0, :, :]
+                        pc_np = new_vh[k]
 
                         ax = plt.subplot(gs[0, k])
                         ax.imshow(pc_np, cmap='bwr', norm=MidpointNormalize(np.min(vh[k]), np.max(vh[k]), vh[k, 0, 0]))
@@ -261,7 +261,7 @@ if __name__ == '__main__':
                             ax.patch.set_edgecolor('blue')
                             ax.patch.set_linewidth(3)
 
-                    plt.savefig(f'test_ims_rcgan/mnist_right_top_eigengan_{i}.png', bbox_inches='tight', dpi=300)
+                    plt.savefig(f'test_ims_rcgan/mnist_right_top_eigengan_{j}.png', bbox_inches='tight', dpi=300)
 
                     plt.close(fig)
 
@@ -348,7 +348,7 @@ if __name__ == '__main__':
 
                             cur_row += 1
 
-                    plt.savefig(f'test_ims_rcgan/mnist_right_bottom_eigengan_{i}.png', bbox_inches='tight', dpi=300)
+                    plt.savefig(f'test_ims_rcgan/mnist_right_bottom_eigengan_{j}.png', bbox_inches='tight', dpi=300)
 
                     plt.close(fig)
 
