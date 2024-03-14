@@ -153,7 +153,7 @@ if __name__ == '__main__':
                 fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
                 gs = gridspec.GridSpec(nrow, ncol,
-                                       wspace=0.05, hspace=0.05,
+                                       wspace=0.0, hspace=0.0,
                                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
@@ -191,7 +191,7 @@ if __name__ == '__main__':
                 fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
                 gs = gridspec.GridSpec(nrow, ncol,
-                                       wspace=0.0, hspace=0.0,
+                                       wspace=0.05, hspace=0.05,
                                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
