@@ -224,7 +224,7 @@ if __name__ == '__main__':
                                            top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                            left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
-                    samps_np = gens[0, :, 0, :, :].cpu().numpy()
+                    samps_np = gens[j, :, 0, :, :].cpu().numpy()
                     avg_np = avg[j, 0, :, :].cpu().numpy()
 
                     single_samps = samps_np - avg_np[None, :, :]
@@ -248,7 +248,7 @@ if __name__ == '__main__':
                         pc_np = new_vh[k]
 
                         ax = plt.subplot(gs[0, k])
-                        ax.imshow(pc_np, cmap='bwr', norm=MidpointNormalize(np.min(new_vh[k]), np.max(new_vh[k]), new_vh[k, 0, 0]))
+                        ax.imshow(pc_np, cmap='bwr', norm=MidpointNormalize(np.min(pc_np), np.max(pc_np), pc_np[k, 0, 0]))
                         ax.set_xticklabels([])
                         ax.set_yticklabels([])
                         ax.set_xticks([])
