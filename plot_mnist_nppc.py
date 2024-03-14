@@ -55,7 +55,7 @@ with torch.no_grad():
         # plt.close()
         # exit()
 
-        w_mat = scale_img(nppc_model.get_dirs(x_distorted, x_restored, use_best=False, use_ddp=False))
+        w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=False, use_ddp=False)
 
         for i in range(x_org.shape[0]):
             nrow = 2
@@ -131,7 +131,7 @@ with torch.no_grad():
             cur_row = 0
 
             for k in range(5):
-                pc_np = w_mat[i, k, 0].cpu().numpy()
+                pc_np = scale_img(w_mat)[i, k, 0].cpu().numpy()
 
                 if k == 1 or k == 4:
                     ax = plt.subplot(gs[cur_row, 0])
