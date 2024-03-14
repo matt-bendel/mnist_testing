@@ -92,8 +92,16 @@ class WrapInception(nn.Module):
         # 1 x 1 x 2048
         return pool
 
+def rect(pos):
+    r = plt.Rectangle(pos - 0.5, 1, 1, facecolor="none", edgecolor="k", linewidth=2)
+    plt.gca().add_patch(r)
+
 def load_object(dct):
     return types.SimpleNamespace(**dct)
+
+# TODO: PCANET in here
+# TODO: Separate Eigenvectors
+# TODO: Colored squares...
 
 if __name__ == '__main__':
     torch.set_float32_matmul_precision('medium')
@@ -156,6 +164,14 @@ if __name__ == '__main__':
                 ax.set_xticks([])
                 ax.set_yticks([])
                 ax.set_ylabel('y')
+                bbox = ax.get_tightbbox(fig.canvas.get_renderer())
+                x0, y0, width, height = bbox.transformed(fig.transFigure.inverted()).bounds
+                # slightly increase the very tight bounds:
+                xpad = 0.05 * width
+                ypad = 0.05 * height
+                fig.add_artist(
+                    plt.Rectangle((x0 - xpad, y0 - ypad), width + 2 * xpad, height + 2 * ypad, edgecolor='red',
+                                  linewidth=3, fill=False))
 
                 ax = plt.subplot(gs[1, 0])
                 ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
