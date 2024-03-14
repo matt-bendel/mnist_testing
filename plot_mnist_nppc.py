@@ -72,6 +72,16 @@ def imshow(img, scale=1, **kwargs):
     )
     return fig
 
+class MidpointNormalize(mpl.colors.Normalize):
+    """Normalise the colorbar."""
+    def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
+        self.midpoint = midpoint
+        mpl.colors.Normalize.__init__(self, vmin, vmax, clip)
+
+    def __call__(self, value, clip=None):
+        x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
+        return np.ma.masked_array(np.interp(value, x, y), np.isnan(value))
+
 fig_count = 0
 with torch.no_grad():
     for i, batch in enumerate(dataloader):
@@ -93,13 +103,6 @@ with torch.no_grad():
         # exit()
 
         w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=True, use_ddp=False)
-        imgs = scale_img(w_mat)
-        imgs = imgs.transpose(0, 1).contiguous()
-        plt.imshow(np.transpose(imgs_to_grid(imgs).cpu().numpy(), (1, 2, 0)))
-        plt.savefig('test.png')
-        exit()
-        print(torch.norm(torch.flatten(w_mat[0, 0, 0])))
-        print(torch.norm(torch.flatten(w_mat[0, 1, 0] * w_mat[0, 0, 0])))
 
         for i in range(x_org.shape[0]):
             nrow = 2
@@ -143,7 +146,7 @@ with torch.no_grad():
             for k in range(5):
                 pc_np = scale_img(w_mat)[i, k, 0].cpu().numpy()
 
-                ax = plt.subplot(gs[0, k])
+                ax = plt.subplot(gs[0, k], norm = MidpointNormalize(np.min(pc_np), np.max(pc_np), pc_np[0, 0]))
                 ax.imshow(pc_np, cmap='bwr')
                 ax.set_xticklabels([])
                 ax.set_yticklabels([])
