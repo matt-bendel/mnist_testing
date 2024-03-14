@@ -103,7 +103,6 @@ def load_object(dct):
 # TODO: Separate Eigenvectors
 # TODO: Colored squares...
 def scale_img(x):
-    print(torch.abs(x).flatten(-3).max(-1))
     return x / torch.abs(x).flatten(-3).max(-1)[0][..., None, None, None] / 1.5 + 0.5
 
 if __name__ == '__main__':
@@ -232,6 +231,7 @@ if __name__ == '__main__':
 
                 for k in range(5):
                     pc_np = vh[k]
+                    print(np.max(pc_np))
 
                     ax = plt.subplot(gs[0, k])
                     ax.imshow(pc_np, cmap='bwr')

@@ -93,6 +93,13 @@ with torch.no_grad():
         # exit()
 
         w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=True, use_ddp=False)
+        imgs = scale_img(w_mat)
+        imgs = imgs.transpose(0, 1).contiguous()
+        plt.imshow(np.transpose(imgs_to_grid(imgs).cpu().numpy(), (1, 2, 0)))
+        plt.savefig('test.png')
+        exit()
+        print(torch.norm(torch.flatten(w_mat[0, 0, 0])))
+        print(torch.norm(torch.flatten(w_mat[0, 1, 0] * w_mat[0, 0, 0])))
 
         for i in range(x_org.shape[0]):
             nrow = 2
