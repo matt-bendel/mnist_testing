@@ -163,8 +163,6 @@ if __name__ == '__main__':
                 ax.set_yticklabels([])
                 ax.set_xticks([])
                 ax.set_yticks([])
-                ax.patch.set_edgecolor('green')
-                ax.patch.set_linewidth(3)
 
                 ax = plt.subplot(gs[1, 0])
                 ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
@@ -223,6 +221,9 @@ if __name__ == '__main__':
                     ax.set_yticks([])
 
                     if k == 1 or k == 4:
+                        ax.patch.set_edgecolor('green')
+                        ax.patch.set_linewidth(3)
+
                         ax = plt.subplot(gs[cur_row, 0])
                         ax.imshow(x_hat_np - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
                         ax.set_xticklabels([])
