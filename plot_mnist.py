@@ -225,10 +225,11 @@ if __name__ == '__main__':
                 cur_row = 1
 
                 for k in range(5):
-                    pc_np = vh[k].reshape((28, 28)) - vh[k].reshape((28, 28))[0, 0]
+                    tmp = vh[k].reshape((28, 28)) - vh[k].reshape((28, 28))[0, 0]
+                    pc_np = 2 * (tmp - np.min(tmp)) / (np.max(tmp) - np.min(tmp)) - 1
 
                     ax = plt.subplot(gs[0, k])
-                    ax.imshow(np.abs(pc_np), cmap='bwr')
+                    ax.imshow(pc_np, cmap='bwr')
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
                     ax.set_xticks([])
