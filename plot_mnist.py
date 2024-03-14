@@ -142,6 +142,8 @@ if __name__ == '__main__':
 
     embedding = InceptionEmbedding()
 
+    fig_count = 0
+
     with torch.no_grad():
         for i, data in enumerate(test_loader):
             x, _ = data
@@ -156,197 +158,200 @@ if __name__ == '__main__':
 
             avg = torch.mean(gens, dim=1)
 
-            if i <= 0:
-                x_np = x[0, 0, :, :].cpu().numpy()
-                x_hat_np = avg[0, 0, :, :].cpu().numpy()
-                y_np = y[0, 0, :, :].cpu().numpy()
+            for j in range(x.shape[0]):
+                if fig_count <= 5:
+                    x_np = x[j, 0, :, :].cpu().numpy()
+                    x_hat_np = avg[j, 0, :, :].cpu().numpy()
+                    y_np = y[j, 0, :, :].cpu().numpy()
 
-                nrow = 1
-                ncol = 1
+                    nrow = 1
+                    ncol = 1
 
-                fig = plt.figure(figsize=(ncol + 1, nrow + 1))
+                    fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
-                gs = gridspec.GridSpec(nrow, ncol,
-                                       wspace=0.05, hspace=0.05,
-                                       top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
-                                       left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+                    gs = gridspec.GridSpec(nrow, ncol,
+                                           wspace=0.05, hspace=0.05,
+                                           top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+                                           left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
 
 
-                ax = plt.subplot(gs[0, 0])
-                ax.imshow(y_np, cmap='gray', vmin=0, vmax=1)
-                ax.set_xticklabels([])
-                ax.set_yticklabels([])
-                ax.set_xticks([])
-                ax.set_yticks([])
-
-                plt.savefig(f'test_ims_rcgan/mnist_left_top_eigengan_{i}.png', bbox_inches='tight', dpi=300)
-
-                plt.close(fig)
-
-                nrow = 2
-                ncol = 1
-
-                fig = plt.figure(figsize=(ncol + 1, nrow + 1))
-
-                gs = gridspec.GridSpec(nrow, ncol,
-                                       wspace=0.05, hspace=0.05,
-                                       top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
-                                       left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
-                ax = plt.subplot(gs[0, 0])
-                ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
-                ax.set_xticklabels([])
-                ax.set_yticklabels([])
-                ax.set_xticks([])
-                ax.set_yticks([])
-
-                ax = plt.subplot(gs[1, 0])
-                ax.imshow(x_np, cmap='gray', vmin=0, vmax=1)
-                ax.set_xticklabels([])
-                ax.set_yticklabels([])
-                ax.set_xticks([])
-                ax.set_yticks([])
-
-                plt.savefig(f'test_ims_rcgan/mnist_left_bottom_eigengan_{i}.png', bbox_inches='tight', dpi=300)
-
-                plt.close(fig)
-
-                nrow = 1
-                ncol = 5
-
-                fig = plt.figure(figsize=(ncol + 1, nrow + 1))
-
-                gs = gridspec.GridSpec(nrow, ncol,
-                                       wspace=0.05, hspace=0.05,
-                                       top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
-                                       left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
-
-                samps_np = gens[0, :, 0, :, :].cpu().numpy()
-                avg_np = avg[0, 0, :, :].cpu().numpy()
-
-                single_samps = samps_np - avg_np[None, :, :]
-
-                cov_mat = np.zeros((784, avg_np.shape[-1] * avg_np.shape[-2]))
-
-                for z in range(784):
-                    cov_mat[z, :] = single_samps[z].flatten()
-
-                u, s, vh = np.linalg.svd(cov_mat, full_matrices=False)
-                s = s.reshape((1, -1))[:, 0:5]
-                print(s.shape)
-                cur_row = 1
-
-                vh = vh[0:5]
-                vh = vh.reshape((5, 28, 28))
-                vh = scale_img(torch.from_numpy(vh).unsqueeze(0).unsqueeze(2)).numpy()
-                vh = vh[0, :, 0, :, :]
-
-                for k in range(5):
-                    pc_np = vh[k]
-
-                    ax = plt.subplot(gs[0, k])
-                    ax.imshow(pc_np, cmap='bwr', norm=MidpointNormalize(np.min(vh[k]), np.max(vh[k]), vh[k, 0, 0]))
+                    ax = plt.subplot(gs[0, 0])
+                    ax.imshow(y_np, cmap='gray', vmin=0, vmax=1)
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
                     ax.set_xticks([])
                     ax.set_yticks([])
 
-                    if k == 1:
-                        ax.patch.set_edgecolor('red')
-                        ax.patch.set_linewidth(3)
-                    elif k == 4:
-                        ax.patch.set_edgecolor('blue')
-                        ax.patch.set_linewidth(3)
+                    plt.savefig(f'test_ims_rcgan/mnist_left_top_eigengan_{i}.png', bbox_inches='tight', dpi=300)
 
-                plt.savefig(f'test_ims_rcgan/mnist_right_top_eigengan_{i}.png', bbox_inches='tight', dpi=300)
+                    plt.close(fig)
 
-                plt.close(fig)
+                    nrow = 2
+                    ncol = 1
 
-                nrow = 2
-                ncol = 5
+                    fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
-                fig = plt.figure(figsize=(ncol + 1, nrow + 1))
+                    gs = gridspec.GridSpec(nrow, ncol,
+                                           wspace=0.05, hspace=0.05,
+                                           top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+                                           left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+                    ax = plt.subplot(gs[0, 0])
+                    ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
+                    ax.set_xticklabels([])
+                    ax.set_yticklabels([])
+                    ax.set_xticks([])
+                    ax.set_yticks([])
 
-                gs = gridspec.GridSpec(nrow, ncol,
-                                       wspace=0.05, hspace=0.05,
-                                       top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
-                                       left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+                    ax = plt.subplot(gs[1, 0])
+                    ax.imshow(x_np, cmap='gray', vmin=0, vmax=1)
+                    ax.set_xticklabels([])
+                    ax.set_yticklabels([])
+                    ax.set_xticks([])
+                    ax.set_yticks([])
 
-                cur_row = 0
+                    plt.savefig(f'test_ims_rcgan/mnist_left_bottom_eigengan_{i}.png', bbox_inches='tight', dpi=300)
 
-                for k in range(5):
-                    pc_np = vh[k].reshape((28, 28))
+                    plt.close(fig)
 
-                    if k == 1 or k == 4:
-                        ax = plt.subplot(gs[cur_row, 0])
-                        ax.imshow(x_hat_np - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
+                    nrow = 1
+                    ncol = 5
+
+                    fig = plt.figure(figsize=(ncol + 1, nrow + 1))
+
+                    gs = gridspec.GridSpec(nrow, ncol,
+                                           wspace=0.05, hspace=0.05,
+                                           top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+                                           left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+
+                    samps_np = gens[0, :, 0, :, :].cpu().numpy()
+                    avg_np = avg[j, 0, :, :].cpu().numpy()
+
+                    single_samps = samps_np - avg_np[None, :, :]
+
+                    cov_mat = np.zeros((784, avg_np.shape[-1] * avg_np.shape[-2]))
+
+                    for z in range(784):
+                        cov_mat[z, :] = single_samps[z].flatten()
+
+                    u, s, vh = np.linalg.svd(cov_mat, full_matrices=False)
+                    s = s.reshape((1, -1))[:, 0:5]
+                    print(s.shape)
+                    cur_row = 1
+
+                    vh = vh[0:5]
+                    vh = vh.reshape((5, 28, 28))
+                    vh = scale_img(torch.from_numpy(vh).unsqueeze(0).unsqueeze(2)).numpy()
+                    vh = vh[0, :, 0, :, :]
+
+                    for k in range(5):
+                        pc_np = vh[k]
+
+                        ax = plt.subplot(gs[0, k])
+                        ax.imshow(pc_np, cmap='bwr', norm=MidpointNormalize(np.min(vh[k]), np.max(vh[k]), vh[k, 0, 0]))
                         ax.set_xticklabels([])
                         ax.set_yticklabels([])
                         ax.set_xticks([])
                         ax.set_yticks([])
+
                         if k == 1:
                             ax.patch.set_edgecolor('red')
                             ax.patch.set_linewidth(3)
-                        else:
+                        elif k == 4:
                             ax.patch.set_edgecolor('blue')
                             ax.patch.set_linewidth(3)
 
-                        ax = plt.subplot(gs[cur_row, 1])
-                        ax.imshow(x_hat_np - 2 * pc_np, cmap='gray', vmin=0, vmax=1)
-                        ax.set_xticklabels([])
-                        ax.set_yticklabels([])
-                        ax.set_xticks([])
-                        ax.set_yticks([])
-                        if k == 1:
-                            ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(3)
-                        else:
-                            ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(3)
+                    plt.savefig(f'test_ims_rcgan/mnist_right_top_eigengan_{i}.png', bbox_inches='tight', dpi=300)
 
-                        ax = plt.subplot(gs[cur_row, 2])
-                        ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
-                        ax.set_xticklabels([])
-                        ax.set_yticklabels([])
-                        ax.set_xticks([])
-                        ax.set_yticks([])
-                        if k == 1:
-                            ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(3)
-                        else:
-                            ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(3)
+                    plt.close(fig)
 
-                        ax = plt.subplot(gs[cur_row, 3])
-                        ax.imshow(x_hat_np + 2 * pc_np, cmap='gray', vmin=0, vmax=1)
-                        ax.set_xticklabels([])
-                        ax.set_yticklabels([])
-                        ax.set_xticks([])
-                        ax.set_yticks([])
-                        if k == 1:
-                            ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(3)
-                        else:
-                            ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(3)
+                    nrow = 2
+                    ncol = 5
 
-                        ax = plt.subplot(gs[cur_row, 4])
-                        ax.imshow(x_hat_np + 3 * pc_np, cmap='gray', vmin=0, vmax=1)
-                        ax.set_xticklabels([])
-                        ax.set_yticklabels([])
-                        ax.set_xticks([])
-                        ax.set_yticks([])
-                        if k == 1:
-                            ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(3)
-                        else:
-                            ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(3)
+                    fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
-                        cur_row += 1
+                    gs = gridspec.GridSpec(nrow, ncol,
+                                           wspace=0.05, hspace=0.05,
+                                           top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+                                           left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
 
-                plt.savefig(f'test_ims_rcgan/mnist_right_bottom_eigengan_{i}.png', bbox_inches='tight', dpi=300)
+                    cur_row = 0
 
-                plt.close(fig)
-            else:
-                exit()
+                    for k in range(5):
+                        pc_np = vh[k].reshape((28, 28))
+
+                        if k == 1 or k == 4:
+                            ax = plt.subplot(gs[cur_row, 0])
+                            ax.imshow(x_hat_np - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
+                            ax.set_xticklabels([])
+                            ax.set_yticklabels([])
+                            ax.set_xticks([])
+                            ax.set_yticks([])
+                            if k == 1:
+                                ax.patch.set_edgecolor('red')
+                                ax.patch.set_linewidth(3)
+                            else:
+                                ax.patch.set_edgecolor('blue')
+                                ax.patch.set_linewidth(3)
+
+                            ax = plt.subplot(gs[cur_row, 1])
+                            ax.imshow(x_hat_np - 2 * pc_np, cmap='gray', vmin=0, vmax=1)
+                            ax.set_xticklabels([])
+                            ax.set_yticklabels([])
+                            ax.set_xticks([])
+                            ax.set_yticks([])
+                            if k == 1:
+                                ax.patch.set_edgecolor('red')
+                                ax.patch.set_linewidth(3)
+                            else:
+                                ax.patch.set_edgecolor('blue')
+                                ax.patch.set_linewidth(3)
+
+                            ax = plt.subplot(gs[cur_row, 2])
+                            ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
+                            ax.set_xticklabels([])
+                            ax.set_yticklabels([])
+                            ax.set_xticks([])
+                            ax.set_yticks([])
+                            if k == 1:
+                                ax.patch.set_edgecolor('red')
+                                ax.patch.set_linewidth(3)
+                            else:
+                                ax.patch.set_edgecolor('blue')
+                                ax.patch.set_linewidth(3)
+
+                            ax = plt.subplot(gs[cur_row, 3])
+                            ax.imshow(x_hat_np + 2 * pc_np, cmap='gray', vmin=0, vmax=1)
+                            ax.set_xticklabels([])
+                            ax.set_yticklabels([])
+                            ax.set_xticks([])
+                            ax.set_yticks([])
+                            if k == 1:
+                                ax.patch.set_edgecolor('red')
+                                ax.patch.set_linewidth(3)
+                            else:
+                                ax.patch.set_edgecolor('blue')
+                                ax.patch.set_linewidth(3)
+
+                            ax = plt.subplot(gs[cur_row, 4])
+                            ax.imshow(x_hat_np + 3 * pc_np, cmap='gray', vmin=0, vmax=1)
+                            ax.set_xticklabels([])
+                            ax.set_yticklabels([])
+                            ax.set_xticks([])
+                            ax.set_yticks([])
+                            if k == 1:
+                                ax.patch.set_edgecolor('red')
+                                ax.patch.set_linewidth(3)
+                            else:
+                                ax.patch.set_edgecolor('blue')
+                                ax.patch.set_linewidth(3)
+
+                            cur_row += 1
+
+                    plt.savefig(f'test_ims_rcgan/mnist_right_bottom_eigengan_{i}.png', bbox_inches='tight', dpi=300)
+
+                    plt.close(fig)
+
+                    fig_count += 1
+                else:
+                    exit()
