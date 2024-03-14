@@ -163,12 +163,10 @@ if __name__ == '__main__':
                 ax.set_yticklabels([])
                 ax.set_xticks([])
                 ax.set_yticks([])
-                bbox = ax.get_tightbbox(fig.canvas.get_renderer())
-                x0, y0, width, height = bbox.transformed(fig.transFigure.inverted()).bounds
-                # slightly increase the very tight bounds:
-                fig.add_artist(
-                    plt.Rectangle((x0 - 2, y0), width, height, edgecolor='red',
-                                  linewidth=3, fill=False))
+                ax.spines['bottom'].set_color('0.5')
+                ax.spines['top'].set_color('0.5')
+                ax.spines['right'].set_color('0.5')
+                ax.spines['left'].set_color('0.5')
 
                 ax = plt.subplot(gs[1, 0])
                 ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
@@ -233,12 +231,6 @@ if __name__ == '__main__':
                         ax.set_yticklabels([])
                         ax.set_xticks([])
                         ax.set_yticks([])
-                        bbox = ax.get_tightbbox(fig.canvas.get_renderer())
-                        x0, y0, width, height = bbox.transformed(fig.transFigure.inverted()).bounds
-                        # slightly increase the very tight bounds:
-                        fig.add_artist(
-                            plt.Rectangle((x0 + 0.02 * width, y0), width, height, edgecolor='red',
-                                          linewidth=3, fill=False))
 
                         ax = plt.subplot(gs[cur_row, 1])
                         ax.imshow(x_hat_np - 2 * pc_np, cmap='gray', vmin=0, vmax=1)
