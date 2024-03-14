@@ -51,7 +51,6 @@ with torch.no_grad():
         # exit()
 
         w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=False, use_ddp=False)
-        print(w_mat.shape)
 
         for i in range(x_org.shape[0]):
             nrow = 2
@@ -81,7 +80,6 @@ with torch.no_grad():
 
             plt.close(fig)
 
-            exit()
 
             nrow = 1
             ncol = 5
@@ -95,7 +93,7 @@ with torch.no_grad():
 
 
             for k in range(5):
-                pc_np = w_mat[k].reshape((28, 28))
+                pc_np = w_mat[i, k].cpu().numpy()
 
                 ax = plt.subplot(gs[0, k])
                 ax.imshow(pc_np, cmap='bwr')
@@ -128,11 +126,11 @@ with torch.no_grad():
             cur_row = 0
 
             for k in range(5):
-                pc_np = vh[k].reshape((28, 28))
+                pc_np = w_mat[i, k].cpu().numpy()
 
                 if k == 1 or k == 4:
                     ax = plt.subplot(gs[cur_row, 0])
-                    ax.imshow(x_hat_np - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
+                    ax.imshow(x_restored[i, 0, :, :].cpu().numpy() - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
                     ax.set_xticks([])
@@ -145,7 +143,7 @@ with torch.no_grad():
                         ax.patch.set_linewidth(3)
 
                     ax = plt.subplot(gs[cur_row, 1])
-                    ax.imshow(x_hat_np - 2 * pc_np, cmap='gray', vmin=0, vmax=1)
+                    ax.imshow(x_restored[i, 0, :, :].cpu().numpy() - 2 * pc_np, cmap='gray', vmin=0, vmax=1)
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
                     ax.set_xticks([])
@@ -158,7 +156,7 @@ with torch.no_grad():
                         ax.patch.set_linewidth(3)
 
                     ax = plt.subplot(gs[cur_row, 2])
-                    ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
+                    ax.imshow(x_restored[i, 0, :, :].cpu().numpy(), cmap='gray', vmin=0, vmax=1)
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
                     ax.set_xticks([])
@@ -171,7 +169,7 @@ with torch.no_grad():
                         ax.patch.set_linewidth(3)
 
                     ax = plt.subplot(gs[cur_row, 3])
-                    ax.imshow(x_hat_np + 2 * pc_np, cmap='gray', vmin=0, vmax=1)
+                    ax.imshow(x_restored[i, 0, :, :].cpu().numpy() + 2 * pc_np, cmap='gray', vmin=0, vmax=1)
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
                     ax.set_xticks([])
@@ -184,7 +182,7 @@ with torch.no_grad():
                         ax.patch.set_linewidth(3)
 
                     ax = plt.subplot(gs[cur_row, 4])
-                    ax.imshow(x_hat_np + 3 * pc_np, cmap='gray', vmin=0, vmax=1)
+                    ax.imshow(x_restored[i, 0, :, :].cpu().numpy() + 3 * pc_np, cmap='gray', vmin=0, vmax=1)
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
                     ax.set_xticks([])
