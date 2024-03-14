@@ -74,7 +74,11 @@ with torch.no_grad():
         # plt.close()
         # exit()
 
-        w_mat = gram_schmidt(nppc_model.get_dirs(x_distorted, x_restored, use_best=False, use_ddp=False))
+        w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=True, use_ddp=False)
+        print(torch.norm(w_mat[0, 0, 0]))
+        print(torch.norm(w_mat[0, 1, 0] * w_mat[0, 0, 0]))
+
+        w_mat = gram_schmidt(nppc_model.get_dirs(x_distorted, x_restored, use_best=True, use_ddp=False))
         print(torch.norm(w_mat[0, 0, 0]))
         print(torch.norm(w_mat[0,1,0] * w_mat[0,0,0]))
 
