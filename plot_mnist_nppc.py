@@ -13,6 +13,7 @@ restoration_net = nppc.RestorationModel(
     device='cuda:0',
 )
 restoration_net.load('./results/mnist_denoising/restoration/checkpoint.pt')
+restoration_net.eval()
 
 nppc_model = nppc.NPPCModel(
     restoration_model_folder='./results/mnist_denoising/restoration/',
@@ -22,6 +23,7 @@ nppc_model = nppc.NPPCModel(
     device='cuda:0',
 )
 nppc_model.load('./results/mnist_denoising/nppc/checkpoint.pt')
+nppc_model.eval()
 
 dataloader = torch.utils.data.DataLoader(
     nppc_model.data_module.test_set,
@@ -34,6 +36,23 @@ dataloader = torch.utils.data.DataLoader(
 def scale_img(x):
     return x / torch.abs(x).flatten(-3).max(-1)[0][..., None, None, None] / 1.5 + 0.5
 
+def gram_schmidt(x):
+    x_shape = x.shape
+    x = x.flatten(2)
+
+    x_orth = []
+    proj_vec_list = []
+    for i in range(x.shape[1]):
+        w = x[:, i, :]
+        for w2 in proj_vec_list:
+            w = w - w2 * torch.sum(w * w2, dim=-1, keepdim=True)
+        w_hat = w.detach() / w.detach().norm(dim=-1, keepdim=True)
+
+        x_orth.append(w)
+        proj_vec_list.append(w_hat)
+
+    x_orth = torch.stack(x_orth, dim=1).view(*x_shape)
+    return x_orth
 
 fig_count = 0
 with torch.no_grad():
@@ -55,7 +74,7 @@ with torch.no_grad():
         # plt.close()
         # exit()
 
-        w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=False, use_ddp=False)
+        w_mat = gram_schmidt(nppc_model.get_dirs(x_distorted, x_restored, use_best=False, use_ddp=False))
         print(torch.norm(w_mat[0, 0, 0]))
         print(torch.norm(w_mat[0,1,0] * w_mat[0,0,0]))
 
