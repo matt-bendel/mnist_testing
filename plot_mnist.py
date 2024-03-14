@@ -167,7 +167,7 @@ if __name__ == '__main__':
                 x0, y0, width, height = bbox.transformed(fig.transFigure.inverted()).bounds
                 # slightly increase the very tight bounds:
                 fig.add_artist(
-                    plt.Rectangle((x0, y0), width, height, edgecolor='red',
+                    plt.Rectangle((x0 - 2, y0), width, height, edgecolor='red',
                                   linewidth=3, fill=False))
 
                 ax = plt.subplot(gs[1, 0])
@@ -233,6 +233,12 @@ if __name__ == '__main__':
                         ax.set_yticklabels([])
                         ax.set_xticks([])
                         ax.set_yticks([])
+                        bbox = ax.get_tightbbox(fig.canvas.get_renderer())
+                        x0, y0, width, height = bbox.transformed(fig.transFigure.inverted()).bounds
+                        # slightly increase the very tight bounds:
+                        fig.add_artist(
+                            plt.Rectangle((x0 - 2, y0), width, height, edgecolor='red',
+                                          linewidth=3, fill=False))
 
                         ax = plt.subplot(gs[cur_row, 1])
                         ax.imshow(x_hat_np - 2 * pc_np, cmap='gray', vmin=0, vmax=1)
