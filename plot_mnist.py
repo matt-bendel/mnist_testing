@@ -163,10 +163,8 @@ if __name__ == '__main__':
                 ax.set_yticklabels([])
                 ax.set_xticks([])
                 ax.set_yticks([])
-                ax.spines['bottom'].set_color('0.5')
-                ax.spines['top'].set_color('0.5')
-                ax.spines['right'].set_color('0.5')
-                ax.spines['left'].set_color('0.5')
+                ax.patch.set_edgecolor('green')
+                ax.patch.set_linewidth(3)
 
                 ax = plt.subplot(gs[1, 0])
                 ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
