@@ -193,7 +193,7 @@ if __name__ == '__main__':
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                plt.savefig(f'test_ims_rcgan/mnist_left_eigengan_{i}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'test_ims_rcgan/mnist_left_bottom_eigengan_{i}.png', bbox_inches='tight', dpi=300)
 
                 plt.close(fig)
 
