@@ -93,7 +93,7 @@ with torch.no_grad():
         # exit()
 
         w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=True, use_ddp=False)
-        imgs = torch.cat((scale_img(w_mat)), dim=0)
+        imgs = scale_img(w_mat)
         imgs = imgs.transpose(0, 1).contiguous()
         plt.imshow(imgs_to_grid(imgs).cpu().numpy())
         plt.savefig('test.png')
