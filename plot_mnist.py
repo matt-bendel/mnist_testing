@@ -103,6 +103,7 @@ def load_object(dct):
 # TODO: Separate Eigenvectors
 # TODO: Colored squares...
 def scale_img(x):
+    print(torch.abs(x).flatten(-3).max(-1))
     return x / torch.abs(x).flatten(-3).max(-1)[0][..., None, None, None] / 1.5 + 0.5
 
 if __name__ == '__main__':
@@ -227,7 +228,6 @@ if __name__ == '__main__':
                 vh = vh[0:5]
                 vh = vh.reshape((5, 28, 28))
                 vh = scale_img(torch.from_numpy(vh).unsqueeze(0).unsqueeze(2)).numpy()
-                print(vh.shape)
                 vh = vh[0, :, 0, :, :]
 
                 for k in range(5):
