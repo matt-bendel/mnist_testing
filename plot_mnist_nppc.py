@@ -147,8 +147,8 @@ with torch.no_grad():
             for k in range(5):
                 pc_np = scale_img(w_mat)[i, k, 0].cpu().numpy()
 
-                ax = plt.subplot(gs[0, k], norm = MidpointNormalize(np.min(pc_np), np.max(pc_np), pc_np[0, 0]))
-                ax.imshow(pc_np, cmap='bwr')
+                ax = plt.subplot(gs[0, k])
+                ax.imshow(pc_np, cmap='bwr', norm=MidpointNormalize(np.min(pc_np), np.max(pc_np), pc_np[0, 0]))
                 ax.set_xticklabels([])
                 ax.set_yticklabels([])
                 ax.set_xticks([])
