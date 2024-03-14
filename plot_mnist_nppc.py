@@ -93,7 +93,7 @@ with torch.no_grad():
 
 
             for k in range(5):
-                pc_np = w_mat[i, k].cpu().numpy()
+                pc_np = w_mat[i, k, 0].cpu().numpy()
 
                 ax = plt.subplot(gs[0, k])
                 ax.imshow(pc_np, cmap='bwr')
@@ -126,7 +126,7 @@ with torch.no_grad():
             cur_row = 0
 
             for k in range(5):
-                pc_np = w_mat[i, k].cpu().numpy()
+                pc_np = w_mat[i, k, 0].cpu().numpy()
 
                 if k == 1 or k == 4:
                     ax = plt.subplot(gs[cur_row, 0])
