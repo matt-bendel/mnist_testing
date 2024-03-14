@@ -163,14 +163,11 @@ if __name__ == '__main__':
                 ax.set_yticklabels([])
                 ax.set_xticks([])
                 ax.set_yticks([])
-                ax.set_ylabel('y')
                 bbox = ax.get_tightbbox(fig.canvas.get_renderer())
                 x0, y0, width, height = bbox.transformed(fig.transFigure.inverted()).bounds
                 # slightly increase the very tight bounds:
-                xpad = 0.05 * width
-                ypad = 0.05 * height
                 fig.add_artist(
-                    plt.Rectangle((x0 - xpad, y0 - ypad), width + 2 * xpad, height + 2 * ypad, edgecolor='red',
+                    plt.Rectangle((x0, y0), width, height, edgecolor='red',
                                   linewidth=3, fill=False))
 
                 ax = plt.subplot(gs[1, 0])
@@ -179,7 +176,6 @@ if __name__ == '__main__':
                 ax.set_yticklabels([])
                 ax.set_xticks([])
                 ax.set_yticks([])
-                ax.set_ylabel('x_hat')
 
                 ax = plt.subplot(gs[2, 0])
                 ax.imshow(x_np, cmap='gray', vmin=0, vmax=1)
@@ -187,7 +183,6 @@ if __name__ == '__main__':
                 ax.set_yticklabels([])
                 ax.set_xticks([])
                 ax.set_yticks([])
-                ax.set_ylabel('x')
                 ax.patch.set_edgecolor('black')
 
                 ax.patch.set_linewidth(1)
