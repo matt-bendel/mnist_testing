@@ -142,20 +142,22 @@ if __name__ == '__main__':
 
             avg = torch.mean(gens, dim=1)
 
-            if i <= 40:
+            if i <= 0:
                 x_np = x[0, 0, :, :].cpu().numpy()
                 x_hat_np = avg[0, 0, :, :].cpu().numpy()
                 y_np = y[0, 0, :, :].cpu().numpy()
 
-                nrow = 4
+                nrow = 1
                 ncol = 1
 
                 fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
                 gs = gridspec.GridSpec(nrow, ncol,
-                                       wspace=0.0, hspace=0.0,
+                                       wspace=0.05, hspace=0.05,
                                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+
+
 
                 ax = plt.subplot(gs[0, 0])
                 ax.imshow(y_np, cmap='gray', vmin=0, vmax=1)
@@ -164,14 +166,27 @@ if __name__ == '__main__':
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                ax = plt.subplot(gs[1, 0])
+                plt.savefig(f'test_ims_rcgan/mnist_left_top_eigengan_{i}.png', bbox_inches='tight', dpi=300)
+
+                plt.close(fig)
+
+                nrow = 2
+                ncol = 1
+
+                fig = plt.figure(figsize=(ncol + 1, nrow + 1))
+
+                gs = gridspec.GridSpec(nrow, ncol,
+                                       wspace=0.05, hspace=0.05,
+                                       top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+                                       left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+                ax = plt.subplot(gs[0, 0])
                 ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
                 ax.set_xticklabels([])
                 ax.set_yticklabels([])
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                ax = plt.subplot(gs[2, 0])
+                ax = plt.subplot(gs[1, 0])
                 ax.imshow(x_np, cmap='gray', vmin=0, vmax=1)
                 ax.set_xticklabels([])
                 ax.set_yticklabels([])
@@ -182,7 +197,7 @@ if __name__ == '__main__':
 
                 plt.close(fig)
 
-                nrow = 3
+                nrow = 1
                 ncol = 5
 
                 fig = plt.figure(figsize=(ncol + 1, nrow + 1))
@@ -217,14 +232,33 @@ if __name__ == '__main__':
                     ax.set_xticks([])
                     ax.set_yticks([])
 
-                    if k == 1 or k == 4:
-                        if k == 1:
-                            ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(4)
-                        else:
-                            ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(4)
+                    if k == 1:
+                        ax.patch.set_edgecolor('red')
+                        ax.patch.set_linewidth(3)
+                    elif k == 4:
+                        ax.patch.set_edgecolor('blue')
+                        ax.patch.set_linewidth(3)
 
+                plt.savefig(f'test_ims_rcgan/mnist_right_top_eigengan_{i}.png', bbox_inches='tight', dpi=300)
+
+                plt.close(fig)
+
+                nrow = 2
+                ncol = 5
+
+                fig = plt.figure(figsize=(ncol + 1, nrow + 1))
+
+                gs = gridspec.GridSpec(nrow, ncol,
+                                       wspace=0.05, hspace=0.05,
+                                       top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+                                       left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+
+                cur_row = 0
+
+                for k in range(5):
+                    pc_np = vh[k].reshape((28, 28))
+
+                    if k == 1 or k == 4:
                         ax = plt.subplot(gs[cur_row, 0])
                         ax.imshow(x_hat_np - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
                         ax.set_xticklabels([])
@@ -233,10 +267,10 @@ if __name__ == '__main__':
                         ax.set_yticks([])
                         if k == 1:
                             ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(4)
+                            ax.patch.set_linewidth(3)
                         else:
                             ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(4)
+                            ax.patch.set_linewidth(3)
 
                         ax = plt.subplot(gs[cur_row, 1])
                         ax.imshow(x_hat_np - 2 * pc_np, cmap='gray', vmin=0, vmax=1)
@@ -246,10 +280,10 @@ if __name__ == '__main__':
                         ax.set_yticks([])
                         if k == 1:
                             ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(4)
+                            ax.patch.set_linewidth(3)
                         else:
                             ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(4)
+                            ax.patch.set_linewidth(3)
 
                         ax = plt.subplot(gs[cur_row, 2])
                         ax.imshow(x_hat_np, cmap='gray', vmin=0, vmax=1)
@@ -259,10 +293,10 @@ if __name__ == '__main__':
                         ax.set_yticks([])
                         if k == 1:
                             ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(4)
+                            ax.patch.set_linewidth(3)
                         else:
                             ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(4)
+                            ax.patch.set_linewidth(3)
 
                         ax = plt.subplot(gs[cur_row, 3])
                         ax.imshow(x_hat_np + 2 * pc_np, cmap='gray', vmin=0, vmax=1)
@@ -272,10 +306,10 @@ if __name__ == '__main__':
                         ax.set_yticks([])
                         if k == 1:
                             ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(4)
+                            ax.patch.set_linewidth(3)
                         else:
                             ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(4)
+                            ax.patch.set_linewidth(3)
 
                         ax = plt.subplot(gs[cur_row, 4])
                         ax.imshow(x_hat_np + 3 * pc_np, cmap='gray', vmin=0, vmax=1)
@@ -285,14 +319,14 @@ if __name__ == '__main__':
                         ax.set_yticks([])
                         if k == 1:
                             ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(4)
+                            ax.patch.set_linewidth(3)
                         else:
                             ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(4)
+                            ax.patch.set_linewidth(3)
 
                         cur_row += 1
 
-                plt.savefig(f'test_ims_rcgan/mnist_right_eigengan_{i}.png', bbox_inches='tight', dpi=300)
+                plt.savefig(f'test_ims_rcgan/mnist_right_bottom_eigengan_{i}.png', bbox_inches='tight', dpi=300)
 
                 plt.close(fig)
             else:
