@@ -159,7 +159,7 @@ if __name__ == '__main__':
             avg = torch.mean(gens, dim=1)
 
             for j in range(x.shape[0]):
-                if fig_count <= 5:
+                if fig_count <= 10:
                     x_np = x[j, 0, :, :].cpu().numpy()
                     x_hat_np = avg[j, 0, :, :].cpu().numpy()
                     y_np = y[j, 0, :, :].cpu().numpy()
