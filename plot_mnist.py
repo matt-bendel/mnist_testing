@@ -3,6 +3,7 @@ import yaml
 import types
 import json
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 from utils.parse_args import create_arg_parser
@@ -104,6 +105,17 @@ def load_object(dct):
 # TODO: Colored squares...
 def scale_img(x):
     return x / torch.abs(x).flatten(-3).max(-1)[0][..., None, None, None] / 1.5 + 0.5
+
+# set the colormap and centre the colorbar
+class MidpointNormalize(mpl.colors.Normalize):
+    """Normalise the colorbar."""
+    def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
+        self.midpoint = midpoint
+        mpl.colors.Normalize.__init__(self, vmin, vmax, clip)
+
+    def __call__(self, value, clip=None):
+        x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
+        return np.ma.masked_array(np.interp(value, x, y), np.isnan(value))
 
 if __name__ == '__main__':
     torch.set_float32_matmul_precision('medium')
@@ -231,10 +243,9 @@ if __name__ == '__main__':
 
                 for k in range(5):
                     pc_np = vh[k]
-                    print(np.max(pc_np))
 
                     ax = plt.subplot(gs[0, k])
-                    ax.imshow(pc_np, cmap='bwr')
+                    ax.imshow(pc_np, cmap='bwr', vmin=np.min(vh[k]), vmax=np.max(vh[k]), norm=MidpointNormalize(np.min(vh[k]), np.max(vh[k]), vh[k, 0, 0]))
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
                     ax.set_xticks([])
