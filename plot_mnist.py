@@ -225,7 +225,7 @@ if __name__ == '__main__':
                 cur_row = 1
 
                 for k in range(5):
-                    pc_np = vh[k].reshape((28, 28)) / np.max(np.abs(vh[k])) / 1.5 + 0.5
+                    pc_np = vh[k].reshape((28, 28)) - vh[k].reshape((28, 28))[0, 0]
 
                     ax = plt.subplot(gs[0, k])
                     ax.imshow(pc_np, cmap='bwr')
