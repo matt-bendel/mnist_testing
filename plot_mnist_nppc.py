@@ -28,7 +28,7 @@ nppc_model.net.eval()
 
 dataloader = torch.utils.data.DataLoader(
     nppc_model.data_module.test_set,
-    batch_size=256,
+    batch_size=4,
     shuffle=False,
     generator=torch.Generator().manual_seed(0),
 )
@@ -95,7 +95,7 @@ with torch.no_grad():
         w_mat = nppc_model.get_dirs(x_distorted, x_restored, use_best=True, use_ddp=False)
         imgs = scale_img(w_mat)
         imgs = imgs.transpose(0, 1).contiguous()
-        plt.imshow(imgs_to_grid(imgs).cpu().numpy())
+        plt.imshow(np.transpose(imgs_to_grid(imgs).cpu().numpy(), (1, 2, 0)))
         plt.savefig('test.png')
         exit()
         print(torch.norm(torch.flatten(w_mat[0, 0, 0])))
