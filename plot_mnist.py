@@ -224,9 +224,14 @@ if __name__ == '__main__':
                 print(s.shape)
                 cur_row = 1
 
+                vh = vh[0:5]
+                vh = vh.reshape((5, 28, 28))
+                vh = scale_img(torch.from_numpy(vh).unsqueeze(0).unsqueeze(2)).numpy()
+                print(vh.shape)
+                vh = vh[0, :, 0, :, :]
+
                 for k in range(5):
-                    tmp = vh[k].reshape((28, 28)) - vh[k].reshape((28, 28))[0, 0]
-                    pc_np = 2 * (tmp - np.min(tmp)) / (np.max(tmp) - np.min(tmp)) - 1
+                    pc_np = vh[k]
 
                     ax = plt.subplot(gs[0, k])
                     ax.imshow(pc_np, cmap='bwr')
