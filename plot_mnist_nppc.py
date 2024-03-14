@@ -8,22 +8,22 @@ import torchvision
 restoration_net = nppc.RestorationModel(
     dataset='mnist',
     data_folder='/storage/matt_models/mnist/',
-    distortion_type='denoising_1',
+    distortion_type='inpainting_1',
     net_type='unet',
     lr=1e-4,
     device='cuda:0',
 )
-restoration_net.load('./results/mnist_denoising/restoration/checkpoint.pt')
+restoration_net.load('./results/mnist_inpainting/restoration/checkpoint.pt')
 restoration_net.net.eval()
 
 nppc_model = nppc.NPPCModel(
-    restoration_model_folder='./results/mnist_denoising/restoration/',
+    restoration_model_folder='./results/mnist_inpainting/restoration/',
     net_type='unet',
     n_dirs=5,
     lr=1e-4,
     device='cuda:0',
 )
-nppc_model.load('./results/mnist_denoising/nppc/checkpoint.pt')
+nppc_model.load('./results/mnist_inpainting/nppc/checkpoint.pt')
 nppc_model.net.eval()
 
 dataloader = torch.utils.data.DataLoader(
