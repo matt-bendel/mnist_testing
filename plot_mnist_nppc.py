@@ -85,7 +85,7 @@ class MidpointNormalize(mpl.colors.Normalize):
 
 fig_count = 0
 with torch.no_grad():
-    for i, batch in enumerate(dataloader):
+    for j, batch in enumerate(dataloader):
         x_org, x_distorted, x_restored = nppc_model.process_batch(batch)
         # plt.figure()
         # plt.imshow(x_org[0, 0, :, :].cpu().numpy(), cmap='gray')
@@ -161,7 +161,7 @@ with torch.no_grad():
                     ax.patch.set_edgecolor('blue')
                     ax.patch.set_linewidth(3)
 
-            plt.savefig(f'/home/bendel.8/Git_Repos/mnist_testing/test_ims_rcgan/mnist_right_top_nppc_{i}.png',
+            plt.savefig(f'/home/bendel.8/Git_Repos/mnist_testing/test_ims_rcgan/mnist_right_top_nppc_{fig_count}.png',
                         bbox_inches='tight', dpi=300)
 
             plt.close(fig)
@@ -249,7 +249,7 @@ with torch.no_grad():
 
                     cur_row += 1
 
-            plt.savefig(f'/home/bendel.8/Git_Repos/mnist_testing/test_ims_rcgan/mnist_right_bottom_nppc_{i}.png',
+            plt.savefig(f'/home/bendel.8/Git_Repos/mnist_testing/test_ims_rcgan/mnist_right_bottom_nppc_{fig_count}.png',
                         bbox_inches='tight', dpi=300)
 
             plt.close(fig)
