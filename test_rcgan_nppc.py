@@ -86,5 +86,5 @@ if __name__ == '__main__':
 
                 weird_l2s.append(weird_l2)
 
-        print(f'L2: {np.mean(l2s)}')
-        print(f'Weird L2: {np.mean(weird_l2s)}')
+        print(f'L2: {np.mean(l2s)} \pm {np.std(l2s) / np.sqrt(len(l2s))}')
+        print(f'Weird L2: {np.mean(weird_l2s)} \pm {np.std(weird_l2s) / np.sqrt(len(weird_l2s))}')
