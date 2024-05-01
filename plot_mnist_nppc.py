@@ -154,7 +154,7 @@ with torch.no_grad():
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                if k == 1:
+                if k == 0:
                     ax.patch.set_edgecolor('red')
                     ax.patch.set_linewidth(3)
                 elif k == 4:
@@ -181,14 +181,14 @@ with torch.no_grad():
             for k in range(5):
                 pc_np = w_mat[i, k, 0].cpu().numpy()
 
-                if k == 1 or k == 4:
+                if k == 0 or k == 4:
                     ax = plt.subplot(gs[cur_row, 0])
                     ax.imshow(x_restored[i, 0, :, :].cpu().numpy() - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
                     ax.set_xticks([])
                     ax.set_yticks([])
-                    if k == 1:
+                    if k == 0:
                         ax.patch.set_edgecolor('red')
                         ax.patch.set_linewidth(3)
                     else:
@@ -201,7 +201,7 @@ with torch.no_grad():
                     ax.set_yticklabels([])
                     ax.set_xticks([])
                     ax.set_yticks([])
-                    if k == 1:
+                    if k == 0:
                         ax.patch.set_edgecolor('red')
                         ax.patch.set_linewidth(3)
                     else:
@@ -214,7 +214,7 @@ with torch.no_grad():
                     ax.set_yticklabels([])
                     ax.set_xticks([])
                     ax.set_yticks([])
-                    if k == 1:
+                    if k == 0:
                         ax.patch.set_edgecolor('red')
                         ax.patch.set_linewidth(3)
                     else:
@@ -227,7 +227,7 @@ with torch.no_grad():
                     ax.set_yticklabels([])
                     ax.set_xticks([])
                     ax.set_yticks([])
-                    if k == 1:
+                    if k == 0:
                         ax.patch.set_edgecolor('red')
                         ax.patch.set_linewidth(3)
                     else:
@@ -240,7 +240,7 @@ with torch.no_grad():
                     ax.set_yticklabels([])
                     ax.set_xticks([])
                     ax.set_yticks([])
-                    if k == 1:
+                    if k == 0:
                         ax.patch.set_edgecolor('red')
                         ax.patch.set_linewidth(3)
                     else:

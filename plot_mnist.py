@@ -254,7 +254,7 @@ if __name__ == '__main__':
                         ax.set_xticks([])
                         ax.set_yticks([])
 
-                        if k == 1:
+                        if k == 0:
                             ax.patch.set_edgecolor('red')
                             ax.patch.set_linewidth(3)
                         elif k == 4:
@@ -280,14 +280,14 @@ if __name__ == '__main__':
                     for k in range(5):
                         pc_np = vh[k].reshape((28, 28))
 
-                        if k == 1 or k == 4:
+                        if k == 0 or k == 4:
                             ax = plt.subplot(gs[cur_row, 0])
                             ax.imshow(x_hat_np - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
                             ax.set_xticklabels([])
                             ax.set_yticklabels([])
                             ax.set_xticks([])
                             ax.set_yticks([])
-                            if k == 1:
+                            if k == 0:
                                 ax.patch.set_edgecolor('red')
                                 ax.patch.set_linewidth(3)
                             else:
@@ -300,7 +300,7 @@ if __name__ == '__main__':
                             ax.set_yticklabels([])
                             ax.set_xticks([])
                             ax.set_yticks([])
-                            if k == 1:
+                            if k == 0:
                                 ax.patch.set_edgecolor('red')
                                 ax.patch.set_linewidth(3)
                             else:
@@ -313,7 +313,7 @@ if __name__ == '__main__':
                             ax.set_yticklabels([])
                             ax.set_xticks([])
                             ax.set_yticks([])
-                            if k == 1:
+                            if k == 0:
                                 ax.patch.set_edgecolor('red')
                                 ax.patch.set_linewidth(3)
                             else:
@@ -326,7 +326,7 @@ if __name__ == '__main__':
                             ax.set_yticklabels([])
                             ax.set_xticks([])
                             ax.set_yticks([])
-                            if k == 1:
+                            if k == 0:
                                 ax.patch.set_edgecolor('red')
                                 ax.patch.set_linewidth(3)
                             else:
@@ -339,7 +339,7 @@ if __name__ == '__main__':
                             ax.set_yticklabels([])
                             ax.set_xticks([])
                             ax.set_yticks([])
-                            if k == 1:
+                            if k == 0:
                                 ax.patch.set_edgecolor('red')
                                 ax.patch.set_linewidth(3)
                             else:
