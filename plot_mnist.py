@@ -117,8 +117,8 @@ class MidpointNormalize(mpl.colors.Normalize):
         x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
         return np.ma.masked_array(np.interp(value, x, y), np.isnan(value))
 
-evec1 = 1
-evec2 = 2
+evec1 = 0
+evec2 = 3
 
 if __name__ == '__main__':
     torch.set_float32_matmul_precision('medium')
