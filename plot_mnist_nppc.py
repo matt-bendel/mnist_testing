@@ -259,5 +259,5 @@ with torch.no_grad():
 
             fig_count += 1
 
-            if (fig_count >= 4):
+            if (fig_count >= 5):
                 exit()
