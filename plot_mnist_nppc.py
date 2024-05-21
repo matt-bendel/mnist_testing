@@ -83,8 +83,8 @@ class MidpointNormalize(mpl.colors.Normalize):
         x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
         return np.ma.masked_array(np.interp(value, x, y), np.isnan(value))
 
-evec1 = 1
-evec2 = 2
+evec1 = 0
+evec2 = 3
 
 fig_count = 0
 with torch.no_grad():
