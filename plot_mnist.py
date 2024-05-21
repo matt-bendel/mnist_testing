@@ -117,6 +117,9 @@ class MidpointNormalize(mpl.colors.Normalize):
         x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
         return np.ma.masked_array(np.interp(value, x, y), np.isnan(value))
 
+evec1 = 1
+evec2 = 2
+
 if __name__ == '__main__':
     torch.set_float32_matmul_precision('medium')
     args = create_arg_parser().parse_args()
@@ -254,10 +257,10 @@ if __name__ == '__main__':
                         ax.set_xticks([])
                         ax.set_yticks([])
 
-                        if k == 0:
+                        if k == evec1:
                             ax.patch.set_edgecolor('red')
                             ax.patch.set_linewidth(3)
-                        elif k == 4:
+                        elif k == evec2:
                             ax.patch.set_edgecolor('blue')
                             ax.patch.set_linewidth(3)
 
@@ -280,14 +283,14 @@ if __name__ == '__main__':
                     for k in range(5):
                         pc_np = vh[k].reshape((28, 28))
 
-                        if k == 0 or k == 4:
+                        if k == evec1 or k == evec2:
                             ax = plt.subplot(gs[cur_row, 0])
                             ax.imshow(x_hat_np - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
                             ax.set_xticklabels([])
                             ax.set_yticklabels([])
                             ax.set_xticks([])
                             ax.set_yticks([])
-                            if k == 0:
+                            if k == evec1:
                                 ax.patch.set_edgecolor('red')
                                 ax.patch.set_linewidth(3)
                             else:
@@ -300,7 +303,7 @@ if __name__ == '__main__':
                             ax.set_yticklabels([])
                             ax.set_xticks([])
                             ax.set_yticks([])
-                            if k == 0:
+                            if k == evec1:
                                 ax.patch.set_edgecolor('red')
                                 ax.patch.set_linewidth(3)
                             else:
@@ -313,7 +316,7 @@ if __name__ == '__main__':
                             ax.set_yticklabels([])
                             ax.set_xticks([])
                             ax.set_yticks([])
-                            if k == 0:
+                            if k == evec1:
                                 ax.patch.set_edgecolor('red')
                                 ax.patch.set_linewidth(3)
                             else:
@@ -326,7 +329,7 @@ if __name__ == '__main__':
                             ax.set_yticklabels([])
                             ax.set_xticks([])
                             ax.set_yticks([])
-                            if k == 0:
+                            if k == evec1:
                                 ax.patch.set_edgecolor('red')
                                 ax.patch.set_linewidth(3)
                             else:
@@ -339,7 +342,7 @@ if __name__ == '__main__':
                             ax.set_yticklabels([])
                             ax.set_xticks([])
                             ax.set_yticks([])
-                            if k == 0:
+                            if k == evec1:
                                 ax.patch.set_edgecolor('red')
                                 ax.patch.set_linewidth(3)
                             else:

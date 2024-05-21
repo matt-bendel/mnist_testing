@@ -83,6 +83,9 @@ class MidpointNormalize(mpl.colors.Normalize):
         x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
         return np.ma.masked_array(np.interp(value, x, y), np.isnan(value))
 
+evec1 = 1
+evec2 = 2
+
 fig_count = 0
 with torch.no_grad():
     for j, batch in enumerate(dataloader):
@@ -154,10 +157,10 @@ with torch.no_grad():
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-                if k == 0:
+                if k == evec1:
                     ax.patch.set_edgecolor('red')
                     ax.patch.set_linewidth(3)
-                elif k == 4:
+                elif k == evec2:
                     ax.patch.set_edgecolor('blue')
                     ax.patch.set_linewidth(3)
 
@@ -181,14 +184,14 @@ with torch.no_grad():
             for k in range(5):
                 pc_np = w_mat[i, k, 0].cpu().numpy()
 
-                if k == 0 or k == 4:
+                if k == evec1 or k == evec2:
                     ax = plt.subplot(gs[cur_row, 0])
                     ax.imshow(x_restored[i, 0, :, :].cpu().numpy() - 3 * pc_np, cmap='gray', vmin=0, vmax=1)
                     ax.set_xticklabels([])
                     ax.set_yticklabels([])
                     ax.set_xticks([])
                     ax.set_yticks([])
-                    if k == 0:
+                    if k == evec1:
                         ax.patch.set_edgecolor('red')
                         ax.patch.set_linewidth(3)
                     else:
@@ -201,7 +204,7 @@ with torch.no_grad():
                     ax.set_yticklabels([])
                     ax.set_xticks([])
                     ax.set_yticks([])
-                    if k == 0:
+                    if k == evec1:
                         ax.patch.set_edgecolor('red')
                         ax.patch.set_linewidth(3)
                     else:
@@ -214,7 +217,7 @@ with torch.no_grad():
                     ax.set_yticklabels([])
                     ax.set_xticks([])
                     ax.set_yticks([])
-                    if k == 0:
+                    if k == evec1:
                         ax.patch.set_edgecolor('red')
                         ax.patch.set_linewidth(3)
                     else:
@@ -227,7 +230,7 @@ with torch.no_grad():
                     ax.set_yticklabels([])
                     ax.set_xticks([])
                     ax.set_yticks([])
-                    if k == 0:
+                    if k == evec1:
                         ax.patch.set_edgecolor('red')
                         ax.patch.set_linewidth(3)
                     else:
@@ -240,7 +243,7 @@ with torch.no_grad():
                     ax.set_yticklabels([])
                     ax.set_xticks([])
                     ax.set_yticks([])
-                    if k == 0:
+                    if k == evec1:
                         ax.patch.set_edgecolor('red')
                         ax.patch.set_linewidth(3)
                     else:
