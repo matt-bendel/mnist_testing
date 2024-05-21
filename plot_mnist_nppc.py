@@ -132,8 +132,8 @@ with torch.no_grad():
             ax.set_xticks([])
             ax.set_yticks([])
 
-            plt.savefig(f'/home/bendel.8/Git_Repos/mnist_testing/test_ims_rcgan/mnist_left_bottom_nppc_{fig_count}.png',
-                        bbox_inches='tight', dpi=300)
+            # plt.savefig(f'/home/bendel.8/Git_Repos/mnist_testing/test_ims_rcgan/mnist_left_bottom_nppc_{fig_count}.png',
+            #             bbox_inches='tight', dpi=300)
 
             plt.close(fig)
 
