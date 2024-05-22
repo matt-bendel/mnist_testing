@@ -117,8 +117,8 @@ class MidpointNormalize(mpl.colors.Normalize):
         x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
         return np.ma.masked_array(np.interp(value, x, y), np.isnan(value))
 
-evec1 = 2
-evec2 = 4
+evec1 = 0
+evec2 = 3
 
 if __name__ == '__main__':
     torch.set_float32_matmul_precision('medium')
@@ -162,7 +162,7 @@ if __name__ == '__main__':
             avg = torch.mean(gens, dim=1)
 
             for j in range(x.shape[0]):
-                if fig_count <= 4:
+                if fig_count <= 10:
                     x_np = x[j, 0, :, :].cpu().numpy()
                     x_hat_np = avg[j, 0, :, :].cpu().numpy()
                     y_np = y[j, 0, :, :].cpu().numpy()
