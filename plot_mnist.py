@@ -186,17 +186,20 @@ if __name__ == '__main__':
                     ax.set_xticks([])
                     ax.set_yticks([])
 
-                    # plt.savefig(f'test_ims_rcgan/mnist_left_top_eigengan_{j}.png', bbox_inches='tight', dpi=300)
+                    plt.savefig(f'test_ims_rcgan/y_{j}.png', bbox_inches='tight', dpi=300)
 
                     plt.close(fig)
 
-                    nrow = 2
+                    plt.imsave(f'test_ims_rcgan/y_{j}.png', y_np, cmap='gray', bbox_inches='tight', dpi=300, vmin=0, vmax=1)
+                    plt.imsave(f'test_ims_rcgan/y_{j}.png', x_np, cmap='gray', bbox_inches='tight', dpi=300, vmin=0, vmax=1)
+
+                    nrow = 1
                     ncol = 1
 
                     fig = plt.figure(figsize=(ncol + 1, nrow + 1))
 
                     gs = gridspec.GridSpec(nrow, ncol,
-                                           wspace=0.05, hspace=0.05,
+                                           wspace=0.0, hspace=0.0,
                                            top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
                                            left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
                     ax = plt.subplot(gs[0, 0])
