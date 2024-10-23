@@ -251,20 +251,20 @@ if __name__ == '__main__':
                         pc_np = new_vh[k]
 
                         ax = plt.subplot(gs[0, k])
-                        ax.imshow(pc_np, cmap='bwr', norm=MidpointNormalize(np.min(pc_np), np.max(pc_np), pc_np[0, 0]))
+                        ax.imshow(samps_np[k], cmap='gray')
                         ax.set_xticklabels([])
                         ax.set_yticklabels([])
                         ax.set_xticks([])
                         ax.set_yticks([])
 
-                        if k == evec1:
-                            ax.patch.set_edgecolor('red')
-                            ax.patch.set_linewidth(3)
-                        elif k == evec2:
-                            ax.patch.set_edgecolor('blue')
-                            ax.patch.set_linewidth(3)
+                        # if k == evec1:
+                        #     ax.patch.set_edgecolor('red')
+                        #     ax.patch.set_linewidth(3)
+                        # elif k == evec2:
+                        #     ax.patch.set_edgecolor('blue')
+                        #     ax.patch.set_linewidth(3)
 
-                    plt.savefig(f'test_ims_rcgan/mnist_right_top_eigengan_{j}.png', bbox_inches='tight', dpi=300)
+                    plt.savefig(f'test_ims_rcgan/mnist_posterior_samps_{j}.png', bbox_inches='tight', dpi=300)
 
                     plt.close(fig)
 
