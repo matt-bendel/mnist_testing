@@ -190,8 +190,8 @@ if __name__ == '__main__':
 
                     plt.close(fig)
 
-                    plt.imsave(f'test_ims_rcgan/y_{j}.png', y_np, cmap='gray', bbox_inches='tight', dpi=300, vmin=0, vmax=1)
-                    plt.imsave(f'test_ims_rcgan/y_{j}.png', x_np, cmap='gray', bbox_inches='tight', dpi=300, vmin=0, vmax=1)
+                    plt.imsave(f'test_ims_rcgan/y_{j}.png', y_np, cmap='gray', bbox_inches='tight', dpi=300)
+                    plt.imsave(f'test_ims_rcgan/y_{j}.png', x_np, cmap='gray', bbox_inches='tight', dpi=300)
 
                     nrow = 1
                     ncol = 1
