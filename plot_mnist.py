@@ -190,8 +190,19 @@ if __name__ == '__main__':
 
                     plt.close(fig)
 
-                    plt.imsave(f'test_ims_rcgan/y_{j}.png', y_np, cmap='gray', dpi=300)
-                    plt.imsave(f'test_ims_rcgan/x_{j}.png', x_np, cmap='gray', dpi=300)
+                    plt.figure()
+                    plt.imshow(y_np, cmap='gray', vmin=0, vmax=1)
+                    plt.xticks([], [])
+                    plt.yticks([], [])
+                    plt.savefig(f'test_ims_rcgan/y_{j}.png', bbox_inches='tight', dpi=300)
+                    plt.close()
+
+                    plt.figure()
+                    plt.imshow(y_np, cmap='gray', vmin=0, vmax=1)
+                    plt.xticks([], [])
+                    plt.yticks([], [])
+                    plt.savefig(f'test_ims_rcgan/x_{j}.png', bbox_inches='tight', dpi=300)
+                    plt.close()
 
                     nrow = 2
                     ncol = 1
