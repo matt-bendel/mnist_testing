@@ -170,25 +170,25 @@ if __name__ == '__main__':
                     nrow = 1
                     ncol = 1
 
-                    fig = plt.figure(figsize=(ncol + 1, nrow + 1))
-
-                    gs = gridspec.GridSpec(nrow, ncol,
-                                           wspace=0.05, hspace=0.05,
-                                           top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
-                                           left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
-
-
-
-                    ax = plt.subplot(gs[0, 0])
-                    ax.imshow(y_np, cmap='gray', vmin=0, vmax=1)
-                    ax.set_xticklabels([])
-                    ax.set_yticklabels([])
-                    ax.set_xticks([])
-                    ax.set_yticks([])
-
-                    plt.savefig(f'test_ims_rcgan/y_{j}.png', bbox_inches='tight', dpi=300)
-
-                    plt.close(fig)
+                    # fig = plt.figure(figsize=(ncol + 1, nrow + 1))
+                    #
+                    # gs = gridspec.GridSpec(nrow, ncol,
+                    #                        wspace=0.05, hspace=0.05,
+                    #                        top=1. - 0.5 / (nrow + 1), bottom=0.5 / (nrow + 1),
+                    #                        left=0.5 / (ncol + 1), right=1 - 0.5 / (ncol + 1))
+                    #
+                    #
+                    #
+                    # ax = plt.subplot(gs[0, 0])
+                    # ax.imshow(y_np, cmap='gray', vmin=0, vmax=1)
+                    # ax.set_xticklabels([])
+                    # ax.set_yticklabels([])
+                    # ax.set_xticks([])
+                    # ax.set_yticks([])
+                    #
+                    # plt.savefig(f'test_ims_rcgan/y_{j}.png', bbox_inches='tight', dpi=300)
+                    #
+                    # plt.close(fig)
 
                     plt.figure()
                     plt.imshow(y_np, cmap='gray', vmin=0, vmax=1)
@@ -198,7 +198,7 @@ if __name__ == '__main__':
                     plt.close()
 
                     plt.figure()
-                    plt.imshow(y_np, cmap='gray', vmin=0, vmax=1)
+                    plt.imshow(x_np, cmap='gray', vmin=0, vmax=1)
                     plt.xticks([], [])
                     plt.yticks([], [])
                     plt.savefig(f'test_ims_rcgan/x_{j}.png', bbox_inches='tight', dpi=300)
