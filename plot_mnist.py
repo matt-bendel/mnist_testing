@@ -193,7 +193,7 @@ if __name__ == '__main__':
                     plt.imsave(f'test_ims_rcgan/y_{j}.png', y_np, cmap='gray', dpi=300)
                     plt.imsave(f'test_ims_rcgan/x_{j}.png', x_np, cmap='gray', dpi=300)
 
-                    nrow = 1
+                    nrow = 2
                     ncol = 1
 
                     fig = plt.figure(figsize=(ncol + 1, nrow + 1))
