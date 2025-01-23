@@ -178,7 +178,6 @@ class CheckpointFunction(th.autograd.Function):
         del output_tensors
         return (None, None) + input_grads
 
-from ipdb import set_trace as debug
 
 class AttentionPool2d(nn.Module):
     """
