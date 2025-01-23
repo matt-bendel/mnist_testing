@@ -2,7 +2,6 @@ import os
 import pickle
 import torch
 
-from guided_diffusion.script_util import create_model
 from abc import abstractmethod
 
 import math
