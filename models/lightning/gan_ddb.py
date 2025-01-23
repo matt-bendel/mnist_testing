@@ -106,6 +106,9 @@ class rcGANDDB(pl.LightningModule):
         return F.l1_loss(avg_recon, x) - self.betastd * np.sqrt(
             2 / (np.pi * self.args.num_z_train * (self.args.num_z_train + 1))) * torch.std(gens, dim=1).mean()
 
+    def alpha(self, t):
+        return t
+
     def training_step(self, batch, batch_idx):
         x, _ = batch
         y = x + torch.randn_like(x) * 1
