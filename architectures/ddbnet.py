@@ -737,7 +737,7 @@ def create_model(
         elif image_size == 64:
             channel_mult = (1, 2, 3, 4)
         elif image_size == 28:
-            channel_mult = (1, 2, 3)
+            channel_mult = (1, 2, 4)
         else:
             raise ValueError(f"unsupported image size: {image_size}")
     else:
@@ -782,7 +782,7 @@ class Image256Net(torch.nn.Module):
             use_checkpoint=False,
             attention_resolutions="7",
             num_heads=4,
-            num_head_channels=64,
+            num_head_channels=4,
             num_heads_upsample=-1,
             use_scale_shift_norm=True,
             dropout=0.0,
