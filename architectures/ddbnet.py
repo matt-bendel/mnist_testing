@@ -773,6 +773,37 @@ class UNetModel(nn.Module):
             zero_module(conv_nd(dims, input_ch, out_channels, 3, padding=1)),
         )
 
+    def forward(self, x, timesteps, y=None):
+        """
+        Apply the model to an input batch.
+
+        :param x: an [N x C x ...] Tensor of inputs.
+        :param timesteps: a 1-D batch of timesteps.
+        :param y: an [N] Tensor of labels, if class-conditional.
+        :return: an [N x C x ...] Tensor of outputs.
+        """
+        assert (y is not None) == (
+                self.num_classes is not None
+        ), "must specify y if and only if the model is class-conditional"
+
+        hs = []
+        emb = self.time_embed(timestep_embedding(timesteps, self.model_channels))
+
+        if self.num_classes is not None:
+            assert y.shape == (x.shape[0],)
+            emb = emb + self.label_emb(y)
+
+        h = x.type(self.dtype)
+        for module in self.input_blocks:
+            h = module(h, emb)
+            hs.append(h)
+        h = self.middle_block(h, emb)
+        for module in self.output_blocks:
+            h = th.cat([h, hs.pop()], dim=1)
+            h = module(h, emb)
+        h = h.type(x.dtype)
+        return self.out(h)
+
 
 def create_model(
     image_size,
@@ -818,7 +849,7 @@ def create_model(
         image_size=image_size,
         in_channels=in_channels,
         model_channels=num_channels,
-        out_channels=(3 if not learn_sigma else 6),
+        out_channels=1,
         num_res_blocks=num_res_blocks,
         attention_resolutions=tuple(attention_ds),
         dropout=dropout,
@@ -844,7 +875,7 @@ class Image256Net(torch.nn.Module):
             num_channels=1,
             num_res_blocks=2,
             channel_mult="",
-            learn_sigma=True,
+            learn_sigma=False,
             class_cond=False,
             use_checkpoint=False,
             attention_resolutions="7",
@@ -856,7 +887,7 @@ class Image256Net(torch.nn.Module):
             resblock_updown=True,
             use_fp16=False,
             use_new_attention_order=False,
-            in_channels=1,
+            in_channels=2,
         )
 
     def forward(self, x, t):
