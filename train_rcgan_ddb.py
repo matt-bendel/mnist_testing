@@ -44,7 +44,7 @@ if __name__ == '__main__':
         save_top_k=50
     )
 
-    trainer = pl.Trainer(accelerator="gpu", strategy='ddp', devices=2,
+    trainer = pl.Trainer(accelerator="gpu", strategy='ddp', devices="auto",
                          max_epochs=cfg.num_epochs, callbacks=[checkpoint_callback_epoch],
                          num_sanity_val_steps=2, profiler="simple", logger=wandb_logger, benchmark=False, log_every_n_steps=10)
 
