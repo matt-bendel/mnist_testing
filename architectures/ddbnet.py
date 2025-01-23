@@ -872,7 +872,7 @@ class Image256Net(torch.nn.Module):
         # initialize model
         self.diffusion_model = create_model(
             image_size=28,
-            num_channels=1,
+            num_channels=64,
             num_res_blocks=2,
             channel_mult="",
             learn_sigma=False,
