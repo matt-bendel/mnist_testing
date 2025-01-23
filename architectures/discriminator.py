@@ -67,3 +67,41 @@ class Discriminator(nn.Module):
         img_flat = output.view(output.size(0), -1)
 
         return self.fc(img_flat)
+
+
+class FourierEmbedding(torch.nn.Module):
+    def __init__(self, num_channels, scale=16):
+        super().__init__()
+        self.register_buffer('freqs', torch.randn(num_channels // 2) * scale)
+
+    def forward(self, x):
+        x = x.ger((2 * np.pi * self.freqs).to(x.dtype))
+        x = torch.cat([x.cos(), x.sin()], dim=1)
+        return x
+
+
+class DiscriminatorDDB(nn.Module):
+    def __init__(self, in_chans, chans=32, num_pool_layers=4):
+        super().__init__()
+
+        self.avg_pool = nn.AvgPool2d(kernel_size=(2, 2), stride=2)
+
+        self.down_sample_layers = nn.ModuleList([ConvBlock(in_chans, chans, 0)])
+        ch = chans
+        for _ in range(num_pool_layers - 1):
+            self.down_sample_layers.append(ConvBlock(ch, ch * 2, 0))
+            ch *= 2
+
+        self.fc = nn.Linear(256, 1)
+
+    def forward(self, x, y, t):
+        # TODO: Use t?
+        output = torch.cat([x, y], dim=1)
+
+        for layer in self.down_sample_layers:
+            output = layer(output)
+            output = self.avg_pool(output)
+
+        img_flat = output.view(output.size(0), -1)
+
+        return self.fc(img_flat)

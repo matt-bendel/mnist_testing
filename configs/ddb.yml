@@ -1,0 +1,23 @@
+checkpoint_dir: "/storage/matt_models/mnist/"
+
+K: 10
+
+im_size: 28
+in_chans: 1
+out_chans: 1
+num_z_train: 2
+num_z_valid: 8
+num_z_pca: 50
+num_pc: 5
+pca_reg_freq: 100
+
+batch_size: 64
+num_epochs: 200
+
+#optimizer:
+lr: 0.001
+beta_1: 0
+beta_2: 0.99
+gp_weight: 10
+drift_weight: 1e-3
+
