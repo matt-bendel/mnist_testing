@@ -110,7 +110,7 @@ class rcGANDDB(pl.LightningModule):
         x, _ = batch
         y = x + torch.randn_like(x) * 1
         y = y.clamp(0, 1)
-        t = torch.rand_like(x.shape[0])
+        t = torch.rand(x.shape[0]).to(x.device)
         x_t = (1 - self.alpha(t)) * x + self.alpha(t) * y
 
         opt_g, opt_d = self.optimizers()
@@ -203,7 +203,7 @@ class rcGANDDB(pl.LightningModule):
         y = x + torch.randn_like(x) * 1
         y = y.clamp(0, 1)
 
-        t = torch.rand_like(x.shape[0])
+        t = torch.rand(x.shape[0]).to(x.device)
         x_t = (1 - self.alpha(t)) * x + self.alpha(t) * y
 
         gens = torch.zeros(
