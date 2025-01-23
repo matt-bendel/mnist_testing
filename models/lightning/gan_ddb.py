@@ -94,11 +94,11 @@ class rcGANDDB(pl.LightningModule):
         for k in range(x_t.shape[0] - 1):
             gen_pred_loss += torch.mean(fake_pred[k + 1])
 
-        adv_weight = 1e-5
+        adv_weight = 1e-4
         if self.current_epoch <= 4:
-            adv_weight = 1e-4
+            adv_weight = 1e-2
         elif self.current_epoch <= 22:
-            adv_weight = 1e-4
+            adv_weight = 1e-3
 
         return - adv_weight * gen_pred_loss.mean()
 
