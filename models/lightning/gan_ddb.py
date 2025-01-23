@@ -96,7 +96,7 @@ class rcGANDDB(pl.LightningModule):
 
         adv_weight = 1e-5
         if self.current_epoch <= 4:
-            adv_weight = 1e-2
+            adv_weight = 1e-4
         elif self.current_epoch <= 22:
             adv_weight = 1e-4
 
