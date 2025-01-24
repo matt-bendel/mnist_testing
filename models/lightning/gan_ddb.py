@@ -259,7 +259,7 @@ class rcGANDDB(pl.LightningModule):
 
         # self.log('cfid', cfid, prog_bar=True)
 
-        self.log('psnr_8', psnr_8)
+        self.log('psnr_8', psnr_8, prog_bar=True)
         self.log('psnr_1', psnr_1)
 
         psnr_diff = (psnr_1 + 2.5) - psnr_8
@@ -269,10 +269,10 @@ class rcGANDDB(pl.LightningModule):
 
         self.val_outputs = []
 
-    # def on_train_epoch_end(self):
-    #     sch_g, _ = self.lr_schedulers()
-    #
-    #     sch_g.step(self.trainer.callback_metrics["cfid"])
+    def on_train_epoch_end(self):
+        sch_g, _ = self.lr_schedulers()
+
+        sch_g.step(self.trainer.callback_metrics["psnr_8"])
 
     def configure_optimizers(self):
         opt_g = torch.optim.Adam(self.generator.parameters(), lr=self.args.lr,
