@@ -124,8 +124,9 @@ if __name__ == '__main__':
             y = y.clamp(0, 1).repeat(4, 1, 1, 1).cuda()
             x_t = y
 
-            for i in reversed(range(N)):
-                t = t_steps[i]
+            for i_t in reversed(range(N)):
+                t = t_steps[i_t]
+                print(t)
                 x_0_hat = model.forward(x_t, t.unsqueeze(0).repeat(num_samps).cuda())
                 x_t = delta / t * x_0_hat + (1 - delta / t) * x_t
 
