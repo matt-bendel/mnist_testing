@@ -124,7 +124,7 @@ if __name__ == '__main__':
         x_t = y
 
         for i in reversed(range(N)):
-            t = t_steps[i].unsqueeze(0).repeat(num_samps)
+            t = t_steps[i].unsqueeze(0).repeat(num_samps).cuda()
             x_0_hat = model.forward(x_t, t)
             x_t = delta / t * x_0_hat + (1 - delta / t) * x_t
 
