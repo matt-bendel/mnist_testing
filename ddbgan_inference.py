@@ -129,7 +129,7 @@ if __name__ == '__main__':
                 t_next = t_steps[i_t - 1] if i_t > 0 else 0.
                 print(t)
                 x_0_hat = model.forward(x_t, t.unsqueeze(0).repeat(num_samps).cuda())
-                if i_t > 1:
+                if i_t > N//2:
                     x_0_hat = torch.mean(x_0_hat, dim=0, keepdim=True)
 
                 x_t = (1 - t_next / t) * x_0_hat + t_next / t * x_t
