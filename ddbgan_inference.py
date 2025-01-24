@@ -117,26 +117,27 @@ if __name__ == '__main__':
     delta = 1 / N
     num_samps = 4
     t_steps = (torch.arange(N) + 1) / N
-    for i, data in enumerate(test_loader):
-        x, _ = data
-        y = x + torch.randn_like(x) * 1
-        y = y.clamp(0, 1).repeat(4, 1, 1, 1).cuda()
-        x_t = y
+    with torch.no_grad():
+        for i, data in enumerate(test_loader):
+            x, _ = data
+            y = x + torch.randn_like(x) * 1
+            y = y.clamp(0, 1).repeat(4, 1, 1, 1).cuda()
+            x_t = y
 
-        for i in reversed(range(N)):
-            t = t_steps[i]
-            x_0_hat = model.forward(x_t, t.unsqueeze(0).repeat(num_samps).cuda())
-            x_t = delta / t * x_0_hat + (1 - delta / t) * x_t
+            for i in reversed(range(N)):
+                t = t_steps[i]
+                x_0_hat = model.forward(x_t, t.unsqueeze(0).repeat(num_samps).cuda())
+                x_t = delta / t * x_0_hat + (1 - delta / t) * x_t
 
-        for j in range(num_samps):
-            x_hat_np = x_t[0, 0, :, :].cpu().numpy()
+            for j in range(num_samps):
+                x_hat_np = x_t[0, 0, :, :].cpu().numpy()
 
-            plt.figure()
-            plt.imshow(x_hat_np, cmap='gray')
-            plt.savefig(f'test_recon_ddbgan_{j}.png')
-            plt.close()
+                plt.figure()
+                plt.imshow(x_hat_np, cmap='gray')
+                plt.savefig(f'test_recon_ddbgan_{j}.png')
+                plt.close()
 
-        exit()
+            exit()
 
         # embedding = MNISTAutoencoder.load_from_checkpoint('/storage/matt_models/mnist/autoencoder/best.ckpt').autoencoder.cuda()
     # embedding.eval()
