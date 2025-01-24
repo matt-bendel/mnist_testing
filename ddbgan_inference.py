@@ -102,7 +102,7 @@ if __name__ == '__main__':
 
     print(f"Experiment Name: {args.exp_name}")
 
-    with open('configs/rcgan.yml', 'r') as f:
+    with open('configs/ddb.yml', 'r') as f:
         cfg = yaml.load(f, Loader=yaml.FullLoader)
         cfg = json.loads(json.dumps(cfg), object_hook=load_object)
 
