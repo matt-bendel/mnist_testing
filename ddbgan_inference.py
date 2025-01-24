@@ -123,6 +123,7 @@ if __name__ == '__main__':
     with torch.no_grad():
         for i, data in enumerate(test_loader):
             x, _ = data
+            x = x.cuda()
             y = x + torch.randn_like(x) * 1
             y = y.clamp(0, 1).repeat(num_samps, 1, 1, 1).cuda()
             x_t = y
