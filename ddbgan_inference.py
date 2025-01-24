@@ -149,8 +149,8 @@ if __name__ == '__main__':
             plt.savefig(f'ddb_figs/test_y_ddbgan_{i}.png')
             plt.close()
 
-            psnr_8 = peak_signal_noise_ratio(torch.mean(x_t, dim=0, keepdim=True), x.repeat(num_samps, 1, 1, 1))
-            psnr_1 = peak_signal_noise_ratio(x_t, x)
+            psnr_8 = peak_signal_noise_ratio(torch.mean(x_t, dim=0).unsqueeze(0), x)
+            psnr_1 = peak_signal_noise_ratio(x_t[0].unsqueeze(0), x)
 
             print(f'PSNR_1: {psnr_1[0]}')
             print(f'PSNR_8: {psnr_8[0]}')
