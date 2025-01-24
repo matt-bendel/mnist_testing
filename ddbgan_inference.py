@@ -120,7 +120,7 @@ if __name__ == '__main__':
     for i, data in enumerate(test_loader):
         x, _ = data
         y = x + torch.randn_like(x) * 1
-        y = y.clamp(0, 1).repeat(4, 1, 1, 1)
+        y = y.clamp(0, 1).repeat(4, 1, 1, 1).cuda()
         x_t = y
 
         for i in reversed(range(N)):
