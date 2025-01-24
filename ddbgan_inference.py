@@ -113,15 +113,15 @@ if __name__ == '__main__':
     dm.setup()
     test_loader = dm.test_dataloader()
 
-    N = 20
+    N = 50
     delta = 1 / N
-    num_samps = 4
+    num_samps = 8
     t_steps = (torch.arange(N) + 1) / N
     with torch.no_grad():
         for i, data in enumerate(test_loader):
             x, _ = data
             y = x + torch.randn_like(x) * 1
-            y = y.clamp(0, 1).repeat(4, 1, 1, 1).cuda()
+            y = y.clamp(0, 1).repeat(num_samps, 1, 1, 1).cuda()
             x_t = y
 
             for i_t in reversed(range(N)):
