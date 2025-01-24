@@ -282,17 +282,17 @@ class rcGANDDB(pl.LightningModule):
 
         reduce_lr_on_plateau_mean = torch.optim.lr_scheduler.ReduceLROnPlateau(
             opt_g,
-            mode='min',
+            mode='max',
             factor=0.75,
-            patience=5,
+            patience=10,
             min_lr=5e-5,
         )
 
         reduce_lr_on_plateau_d = torch.optim.lr_scheduler.ReduceLROnPlateau(
             opt_d,
-            mode='min',
+            mode='max',
             factor=0.1,
-            patience=5,
+            patience=10,
             min_lr=5e-6,
         )
         return [[opt_g, opt_d], [reduce_lr_on_plateau_mean, reduce_lr_on_plateau_d]]

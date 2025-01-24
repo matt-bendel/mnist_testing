@@ -113,7 +113,7 @@ if __name__ == '__main__':
     dm.setup()
     test_loader = dm.test_dataloader()
 
-    N = 50
+    N = 10
     delta = 1 / N
     num_samps = 8
     t_steps = (torch.arange(N) + 1) / N
