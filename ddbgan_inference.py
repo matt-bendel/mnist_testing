@@ -113,7 +113,7 @@ if __name__ == '__main__':
     dm.setup()
     test_loader = dm.test_dataloader()
 
-    N = 50
+    N = 100
     delta = 1 / N
     num_samps = 8
     t_steps = (torch.arange(N) + 1) / N
@@ -126,9 +126,10 @@ if __name__ == '__main__':
 
             for i_t in reversed(range(N)):
                 t = t_steps[i_t]
+                t_next = t_steps[i_t - 1] if i_t > 0 else 0.
                 print(t)
                 x_0_hat = model.forward(x_t, t.unsqueeze(0).repeat(num_samps).cuda())
-                x_t = delta / t * x_0_hat + (1 - delta / t) * x_t
+                x_t = (1 - t_next / t) * x_0_hat + t_next / t * x_t
 
             x_np = x[0, 0, :, :].cpu().numpy()
 
