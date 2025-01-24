@@ -18,6 +18,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import Parameter as P
 from torchvision.models.inception import inception_v3
+from torchmetrics.functional import peak_signal_noise_ratio
+
+
 class InceptionEmbedding:
     def __init__(self, parallel=False):
         # Expects inputs to be in range [-1, 1]
@@ -113,9 +116,9 @@ if __name__ == '__main__':
     dm.setup()
     test_loader = dm.test_dataloader()
 
-    N = 10
+    N = 100
     delta = 1 / N
-    num_samps = 16
+    num_samps = 8
     t_steps = (torch.arange(N) + 1) / N
     with torch.no_grad():
         for i, data in enumerate(test_loader):
@@ -127,10 +130,7 @@ if __name__ == '__main__':
             for i_t in reversed(range(N)):
                 t = t_steps[i_t]
                 t_next = t_steps[i_t - 1] if i_t > 0 else 0.
-                print(t)
                 x_0_hat = model.forward(x_t, t.unsqueeze(0).repeat(num_samps).cuda())
-                if i_t == N - 1:
-                    x_0_hat = torch.mean(x_0_hat, dim=0, keepdim=True)
 
                 x_t = (1 - t_next / t) * x_0_hat + t_next / t * x_t
 
@@ -147,6 +147,12 @@ if __name__ == '__main__':
             plt.imshow(y_np, cmap='gray')
             plt.savefig(f'ddb_figs/test_y_ddbgan_{i}.png')
             plt.close()
+
+            psnr_8 = peak_signal_noise_ratio(torch.mean(x_t, dim=0, keepdim=True), x.repeat(num_samps, 1, 1, 1))
+            psnr_1 = peak_signal_noise_ratio(x_t, x)
+
+            print(f'PSNR_1: {psnr_1[0]}')
+            print(f'PSNR_8: {psnr_8[0]}')
 
             for j in range(num_samps):
                 x_hat_np = x_t[j, 0, :, :].cpu().numpy()
