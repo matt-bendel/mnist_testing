@@ -115,7 +115,7 @@ if __name__ == '__main__':
 
     N = 10
     delta = 1 / N
-    num_samps = 8
+    num_samps = 16
     t_steps = (torch.arange(N) + 1) / N
     with torch.no_grad():
         for i, data in enumerate(test_loader):
@@ -138,14 +138,14 @@ if __name__ == '__main__':
 
             plt.figure()
             plt.imshow(x_np, cmap='gray')
-            plt.savefig(f'test_x_ddbgan.png')
+            plt.savefig(f'ddb_figs/test_x_ddbgan_{i}.png')
             plt.close()
 
             y_np = y[0, 0, :, :].cpu().numpy()
 
             plt.figure()
             plt.imshow(y_np, cmap='gray')
-            plt.savefig(f'test_y_ddbgan.png')
+            plt.savefig(f'ddb_figs/test_y_ddbgan_{i}.png')
             plt.close()
 
             for j in range(num_samps):
@@ -153,10 +153,11 @@ if __name__ == '__main__':
 
                 plt.figure()
                 plt.imshow(x_hat_np, cmap='gray')
-                plt.savefig(f'test_recon_ddbgan_{j}.png')
+                plt.savefig(f'ddb_figs/test_recon_ddbgan_{i}_{j}.png')
                 plt.close()
 
-            exit()
+            if i == 2:
+                exit()
 
         # embedding = MNISTAutoencoder.load_from_checkpoint('/storage/matt_models/mnist/autoencoder/best.ckpt').autoencoder.cuda()
     # embedding.eval()
