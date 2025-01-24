@@ -130,7 +130,7 @@ if __name__ == '__main__':
                 x_t = delta / t * x_0_hat + (1 - delta / t) * x_t
 
             for j in range(num_samps):
-                x_hat_np = x_t[0, 0, :, :].cpu().numpy()
+                x_hat_np = x_t[j, 0, :, :].cpu().numpy()
 
                 plt.figure()
                 plt.imshow(x_hat_np, cmap='gray')
