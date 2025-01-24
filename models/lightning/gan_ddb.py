@@ -107,7 +107,7 @@ class rcGANDDB(pl.LightningModule):
             2 / (np.pi * self.args.num_z_train * (self.args.num_z_train + 1))) * torch.std(gens, dim=1).mean()
 
     def alpha(self, t):
-        return t
+        return torch.sin(t * np.pi / 2)
 
     def training_step(self, batch, batch_idx):
         x, _ = batch
