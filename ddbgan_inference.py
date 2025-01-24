@@ -116,7 +116,7 @@ if __name__ == '__main__':
     dm.setup()
     test_loader = dm.test_dataloader()
 
-    N = 1000
+    N = 100
     delta = 1 / N
     num_samps = 8
     t_steps = (torch.arange(N) + 1) / N
@@ -150,7 +150,7 @@ if __name__ == '__main__':
             plt.close()
 
             psnr_8 = peak_signal_noise_ratio(torch.mean(x_t, dim=0).unsqueeze(0), x)
-            psnr_1 = peak_signal_noise_ratio(x_t[0].unsqueeze(0), x)
+            psnr_1 = peak_signal_noise_ratio(x_t, x.repeat(num_samps, 1, 1, 1))
 
             print(f'PSNR_1: {psnr_1}')
             print(f'PSNR_8: {psnr_8}')
