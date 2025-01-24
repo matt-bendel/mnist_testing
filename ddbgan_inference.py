@@ -129,6 +129,20 @@ if __name__ == '__main__':
                 x_0_hat = model.forward(x_t, t.unsqueeze(0).repeat(num_samps).cuda())
                 x_t = delta / t * x_0_hat + (1 - delta / t) * x_t
 
+            x_np = x[0, 0, :, :].cpu().numpy()
+
+            plt.figure()
+            plt.imshow(x_np, cmap='gray')
+            plt.savefig(f'test_x_ddbgan.png')
+            plt.close()
+
+            y_np = y[0, 0, :, :].cpu().numpy()
+
+            plt.figure()
+            plt.imshow(y_np, cmap='gray')
+            plt.savefig(f'test_y_ddbgan.png')
+            plt.close()
+
             for j in range(num_samps):
                 x_hat_np = x_t[j, 0, :, :].cpu().numpy()
 
