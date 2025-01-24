@@ -152,8 +152,8 @@ if __name__ == '__main__':
             psnr_8 = peak_signal_noise_ratio(torch.mean(x_t, dim=0).unsqueeze(0), x)
             psnr_1 = peak_signal_noise_ratio(x_t[0].unsqueeze(0), x)
 
-            print(f'PSNR_1: {psnr_1[0]}')
-            print(f'PSNR_8: {psnr_8[0]}')
+            print(f'PSNR_1: {psnr_1}')
+            print(f'PSNR_8: {psnr_8}')
 
             for j in range(num_samps):
                 x_hat_np = x_t[j, 0, :, :].cpu().numpy()
